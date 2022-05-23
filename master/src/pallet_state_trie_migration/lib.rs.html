@@ -1609,8 +1609,6 @@
 <span id="1604">1604</span>
 <span id="1605">1605</span>
 <span id="1606">1606</span>
-<span id="1607">1607</span>
-<span id="1608">1608</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2022 Parity Technologies (UK) Ltd.</span>
@@ -2461,6 +2459,8 @@
 			<span class="comment">// function.</span>
 			<span class="kw">let</span> <span class="ident">null</span> <span class="op">=</span> <span class="ident">MigrationLimits::default</span>();
 			<span class="kw">let</span> <span class="ident">caller</span> <span class="op">=</span> <span class="ident">frame_benchmarking::whitelisted_caller</span>();
+			<span class="comment">// Allow signed migrations.</span>
+			<span class="ident">SignedMigrationMaxLimits</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="ident">MigrationLimits</span> { <span class="ident">size</span>: <span class="number">1024</span>, <span class="ident">item</span>: <span class="number">5</span> });
 		}: <span class="kw">_</span>(<span class="ident">frame_system::RawOrigin::Signed</span>(<span class="ident">caller</span>), <span class="ident">null</span>, <span class="number">0</span>, <span class="ident">StateTrieMigration</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::migration_process</span>())
 		<span class="ident">verify</span> {
 			<span class="macro">assert_eq!</span>(<span class="ident">StateTrieMigration</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::migration_process</span>(), <span class="ident">Default::default</span>())
@@ -2759,14 +2759,7 @@
 		}
 
 		<span class="ident">sp_tracing::try_init_simple</span>();
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ext</span>: <span class="ident">sp_io::TestExternalities</span> <span class="op">=</span> (<span class="ident">custom_storage</span>, <span class="ident">version</span>).<span class="ident">into</span>();
-
-		<span class="comment">// set some genesis values for this pallet as well.</span>
-		<span class="ident">ext</span>.<span class="ident">execute_with</span>(<span class="op">|</span><span class="op">|</span> {
-			<span class="ident">SignedMigrationMaxLimits</span>::<span class="op">&lt;</span><span class="ident">Test</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="ident">MigrationLimits</span> { <span class="ident">size</span>: <span class="number">1024</span>, <span class="ident">item</span>: <span class="number">5</span> });
-		});
-
-		<span class="ident">ext</span>
+		(<span class="ident">custom_storage</span>, <span class="ident">version</span>).<span class="ident">into</span>()
 	}
 
 	<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">run_to_block</span>(<span class="ident">n</span>: <span class="ident">u32</span>) -&gt; (<span class="ident">H256</span>, <span class="ident">u64</span>) {
@@ -2904,6 +2897,9 @@
 	<span class="kw">fn</span> <span class="ident">signed_migrate_works</span>() {
 		<span class="ident">new_test_ext</span>(<span class="ident">StateVersion::V0</span>, <span class="bool-val">true</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>).<span class="ident">execute_with</span>(<span class="op">|</span><span class="op">|</span> {
 			<span class="macro">assert_eq!</span>(<span class="ident">MigrationProcess</span>::<span class="op">&lt;</span><span class="ident">Test</span><span class="op">&gt;</span><span class="ident">::get</span>(), <span class="ident">Default::default</span>());
+
+			<span class="comment">// Allow signed migrations.</span>
+			<span class="ident">SignedMigrationMaxLimits</span>::<span class="op">&lt;</span><span class="ident">Test</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="ident">MigrationLimits</span> { <span class="ident">size</span>: <span class="number">1024</span>, <span class="ident">item</span>: <span class="number">5</span> });
 
 			<span class="comment">// can&#39;t submit if limit is too high.</span>
 			<span class="macro">frame_support::assert_err!</span>(
