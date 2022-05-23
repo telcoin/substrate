@@ -2467,6 +2467,17 @@
 <span id="2462">2462</span>
 <span id="2463">2463</span>
 <span id="2464">2464</span>
+<span id="2465">2465</span>
+<span id="2466">2466</span>
+<span id="2467">2467</span>
+<span id="2468">2468</span>
+<span id="2469">2469</span>
+<span id="2470">2470</span>
+<span id="2471">2471</span>
+<span id="2472">2472</span>
+<span id="2473">2473</span>
+<span id="2474">2474</span>
+<span id="2475">2475</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2017-2022 Parity Technologies (UK) Ltd.</span>
@@ -4022,6 +4033,15 @@
 <span class="doccomment">/// used using `#[pallet::compact]`, function must return `DispatchResultWithPostInfo` or</span>
 <span class="doccomment">/// `DispatchResult`.</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// Each dispatchable may also be annotated with the `#[pallet::call_index($idx)]` attribute,</span>
+<span class="doccomment">/// which defines and sets the codec index for the dispatchable function in the `Call` enum.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// All call indexes start from 0, until it encounters a dispatchable function with a defined</span>
+<span class="doccomment">/// call index. The dispatchable function that lexically follows the function with a defined</span>
+<span class="doccomment">/// call index will have that call index, but incremented by 1, e.g. if there are 3</span>
+<span class="doccomment">/// dispatchable functions `fn foo`, `fn bar` and `fn qux` in that order, and only `fn bar` has</span>
+<span class="doccomment">/// a call index of 10, then `fn qux` will have an index of 11, instead of 1.</span>
+<span class="doccomment">///</span>
 <span class="doccomment">/// All arguments must implement `Debug`, `PartialEq`, `Eq`, `Decode`, `Encode`, `Clone`. For</span>
 <span class="doccomment">/// ease of use, bound the trait `Member` available in frame_support::pallet_prelude.</span>
 <span class="doccomment">///</span>
@@ -4035,16 +4055,18 @@
 <span class="doccomment">/// **WARNING**: modifying dispatchables, changing their order, removing some must be done with</span>
 <span class="doccomment">/// care. Indeed this will change the outer runtime call type (which is an enum with one</span>
 <span class="doccomment">/// variant per pallet), this outer runtime call can be stored on-chain (e.g. in</span>
-<span class="doccomment">/// pallet-scheduler). Thus migration might be needed.</span>
+<span class="doccomment">/// pallet-scheduler). Thus migration might be needed. To mitigate against some of this, the</span>
+<span class="doccomment">/// `#[pallet::call_index($idx)]` attribute can be used to fix the order of the dispatchable so</span>
+<span class="doccomment">/// that the `Call` enum encoding does not change after modification.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ### Macro expansion</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// The macro create an enum `Call` with one variant per dispatchable. This enum implements:</span>
+<span class="doccomment">/// The macro creates an enum `Call` with one variant per dispatchable. This enum implements:</span>
 <span class="doccomment">/// `Clone`, `Eq`, `PartialEq`, `Debug` (with stripped implementation in `not(&quot;std&quot;)`),</span>
 <span class="doccomment">/// `Encode`, `Decode`, `GetDispatchInfo`, `GetCallName`, `UnfilteredDispatchable`.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// The macro implement on `Pallet`, the `Callable` trait and a function `call_functions` which</span>
-<span class="doccomment">/// returns the dispatchable metadatas.</span>
+<span class="doccomment">/// The macro implement the `Callable` trait on `Pallet` and a function `call_functions` which</span>
+<span class="doccomment">/// returns the dispatchable metadata.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Extra constants: `#[pallet::extra_constants]` optional</span>
 <span class="doccomment">///</span>
