@@ -1558,7 +1558,7 @@
 		<span class="ident">sp_core::testing::TaskExecutor::new</span>(),
 	)
 	.<span class="ident">execute</span>(<span class="ident">execution</span>.<span class="ident">into</span>())
-	.<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;failed to execute &#39;TryRuntime_on_runtime_upgrade&#39;: {}&quot;</span>, <span class="ident">e</span>))
+	.<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;failed to execute &#39;{}&#39;: {}&quot;</span>, <span class="ident">method</span>, <span class="ident">e</span>))
 	.<span class="ident">map_err</span>::<span class="op">&lt;</span><span class="ident">sc_cli::Error</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">Into::into</span>)<span class="question-mark">?</span>;
 
 	<span class="prelude-val">Ok</span>((<span class="ident">changes</span>, <span class="ident">encoded_results</span>))
