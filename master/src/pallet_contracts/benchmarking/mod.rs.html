@@ -3129,8 +3129,8 @@
 		<span class="op">&lt;</span><span class="ident">BalanceOf</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="kw">as</span> <span class="ident">codec::HasCompact</span><span class="op">&gt;</span><span class="ident">::Type</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="ident">sp_std::fmt::Debug</span> <span class="op">+</span> <span class="ident">scale_info::TypeInfo</span> <span class="op">+</span> <span class="ident">codec::Encode</span>,
 	}
 
-	<span class="comment">// The base weight without any actual work performed apart from the setup costs.</span>
-	<span class="ident">on_initialize</span> {}: {
+	<span class="comment">// The base weight consumed on processing contracts deletion queue.</span>
+	<span class="ident">on_process_deletion_queue_batch</span> {}: {
 		<span class="ident">Storage</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::process_deletion_queue_batch</span>(<span class="ident">Weight::MAX</span>)
 	}
 

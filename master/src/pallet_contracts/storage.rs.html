@@ -543,7 +543,7 @@
 	<span class="doccomment">/// of those keys can be deleted from the deletion queue given the supplied queue length</span>
 	<span class="doccomment">/// and weight limit.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deletion_budget</span>(<span class="ident">queue_len</span>: <span class="ident">usize</span>, <span class="ident">weight_limit</span>: <span class="ident">Weight</span>) -&gt; (<span class="ident">u64</span>, <span class="ident">u32</span>) {
-		<span class="kw">let</span> <span class="ident">base_weight</span> <span class="op">=</span> <span class="ident">T::WeightInfo::on_initialize</span>();
+		<span class="kw">let</span> <span class="ident">base_weight</span> <span class="op">=</span> <span class="ident">T::WeightInfo::on_process_deletion_queue_batch</span>();
 		<span class="kw">let</span> <span class="ident">weight_per_queue_item</span> <span class="op">=</span> <span class="ident">T::WeightInfo::on_initialize_per_queue_item</span>(<span class="number">1</span>) <span class="op">-</span>
 			<span class="ident">T::WeightInfo::on_initialize_per_queue_item</span>(<span class="number">0</span>);
 		<span class="kw">let</span> <span class="ident">weight_per_key</span> <span class="op">=</span> <span class="ident">T::WeightInfo::on_initialize_per_trie_key</span>(<span class="number">1</span>) <span class="op">-</span>
