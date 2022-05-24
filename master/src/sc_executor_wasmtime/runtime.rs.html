@@ -769,6 +769,21 @@
 <span id="764">764</span>
 <span id="765">765</span>
 <span id="766">766</span>
+<span id="767">767</span>
+<span id="768">768</span>
+<span id="769">769</span>
+<span id="770">770</span>
+<span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
+<span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2019-2022 Parity Technologies (UK) Ltd.</span>
@@ -1112,6 +1127,21 @@ directory = \&quot;{cache_dir}\&quot;
 	);
 
 	<span class="kw">if</span> <span class="ident">use_pooling</span> {
+		<span class="kw">const</span> <span class="ident">WASM_PAGE_SIZE</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">65536</span>;
+		<span class="kw">const</span> <span class="ident">MAX_WASM_PAGES</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">0x10000</span>;
+
+		<span class="kw">let</span> <span class="ident">memory_pages</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">max_memory_size</span>) <span class="op">=</span> <span class="ident">semantics</span>.<span class="ident">max_memory_size</span> {
+			<span class="kw">let</span> <span class="ident">max_memory_size</span> <span class="op">=</span> <span class="ident">max_memory_size</span> <span class="kw">as</span> <span class="ident">u64</span>;
+			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pages</span> <span class="op">=</span> <span class="ident">max_memory_size</span> <span class="op">/</span> <span class="ident">WASM_PAGE_SIZE</span>;
+			<span class="kw">if</span> <span class="ident">max_memory_size</span> <span class="op">%</span> <span class="ident">WASM_PAGE_SIZE</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
+				<span class="ident">pages</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+			}
+
+			<span class="ident">std::cmp::min</span>(<span class="ident">MAX_WASM_PAGES</span>, <span class="ident">pages</span>)
+		} <span class="kw">else</span> {
+			<span class="ident">MAX_WASM_PAGES</span>
+		};
+
 		<span class="ident">config</span>.<span class="ident">allocation_strategy</span>(<span class="ident">wasmtime::InstanceAllocationStrategy::Pooling</span> {
 			<span class="ident">strategy</span>: <span class="ident">wasmtime::PoolingAllocationStrategy::ReuseAffinity</span>,
 
@@ -1124,7 +1154,7 @@ directory = \&quot;{cache_dir}\&quot;
 				<span class="comment">//   memory_pages: 2070</span>
 				<span class="ident">size</span>: <span class="number">64</span> <span class="op">*</span> <span class="number">1024</span>,
 				<span class="ident">table_elements</span>: <span class="number">2048</span>,
-				<span class="ident">memory_pages</span>: <span class="number">4096</span>,
+				<span class="ident">memory_pages</span>,
 
 				<span class="comment">// We can only have a single of those.</span>
 				<span class="ident">tables</span>: <span class="number">1</span>,
