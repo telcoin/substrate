@@ -2083,9 +2083,7 @@
 			<span class="ident">ConstU32</span>, <span class="ident">ConstU64</span>, <span class="ident">ConstU8</span>, <span class="ident">Currency</span>, <span class="ident">LockIdentifier</span>, <span class="ident">LockableCurrency</span>,
 			<span class="ident">WithdrawReasons</span>,
 		},
-		<span class="ident">weights</span>::{
-			<span class="ident">ConstantMultiplier</span>, <span class="ident">IdentityFee</span>, <span class="ident">RuntimeDbWeight</span>, <span class="ident">Weight</span>, <span class="ident">WeightToFeePolynomial</span>,
-		},
+		<span class="ident">weights</span>::{<span class="ident">ConstantMultiplier</span>, <span class="ident">IdentityFee</span>, <span class="ident">RuntimeDbWeight</span>, <span class="ident">Weight</span>, <span class="ident">WeightToFee</span>},
 	};
 	<span class="kw">use</span> <span class="ident">frame_system</span>::{<span class="ident">Call</span> <span class="kw">as</span> <span class="ident">SystemCall</span>, <span class="ident">ChainContext</span>, <span class="ident">LastRuntimeUpgradeInfo</span>};
 	<span class="kw">use</span> <span class="ident">pallet_balances::Call</span> <span class="kw">as</span> <span class="ident">BalancesCall</span>;
@@ -2373,7 +2371,7 @@
 				.<span class="ident">get</span>(<span class="ident">DispatchClass::Normal</span>)
 				.<span class="ident">base_extrinsic</span>;
 		<span class="kw">let</span> <span class="ident">fee</span>: <span class="ident">Balance</span> <span class="op">=</span>
-			<span class="op">&lt;</span><span class="ident">Runtime</span> <span class="kw">as</span> <span class="ident">pallet_transaction_payment::Config</span><span class="op">&gt;</span><span class="ident">::WeightToFee::calc</span>(<span class="kw-2">&amp;</span><span class="ident">weight</span>);
+			<span class="op">&lt;</span><span class="ident">Runtime</span> <span class="kw">as</span> <span class="ident">pallet_transaction_payment::Config</span><span class="op">&gt;</span><span class="ident">::WeightToFee::weight_to_fee</span>(<span class="kw-2">&amp;</span><span class="ident">weight</span>);
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">sp_io::TestExternalities::new</span>(<span class="ident">t</span>);
 		<span class="ident">t</span>.<span class="ident">execute_with</span>(<span class="op">|</span><span class="op">|</span> {
 			<span class="ident">Executive::initialize_block</span>(<span class="kw-2">&amp;</span><span class="ident">Header::new</span>(
@@ -2660,7 +2658,9 @@
 						.<span class="ident">get</span>(<span class="ident">DispatchClass::Normal</span>)
 						.<span class="ident">base_extrinsic</span>;
 				<span class="kw">let</span> <span class="ident">fee</span>: <span class="ident">Balance</span> <span class="op">=</span>
-					<span class="op">&lt;</span><span class="ident">Runtime</span> <span class="kw">as</span> <span class="ident">pallet_transaction_payment::Config</span><span class="op">&gt;</span><span class="ident">::WeightToFee::calc</span>(<span class="kw-2">&amp;</span><span class="ident">weight</span>);
+					<span class="op">&lt;</span><span class="ident">Runtime</span> <span class="kw">as</span> <span class="ident">pallet_transaction_payment::Config</span><span class="op">&gt;</span><span class="ident">::WeightToFee::weight_to_fee</span>(
+						<span class="kw-2">&amp;</span><span class="ident">weight</span>,
+					);
 				<span class="ident">Executive::initialize_block</span>(<span class="kw-2">&amp;</span><span class="ident">Header::new</span>(
 					<span class="number">1</span>,
 					<span class="ident">H256::default</span>(),
