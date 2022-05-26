@@ -481,8 +481,6 @@
 <span id="476">476</span>
 <span id="477">477</span>
 <span id="478">478</span>
-<span id="479">479</span>
-<span id="480">480</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2019-2022 Parity Technologies (UK) Ltd.</span>
@@ -545,7 +543,6 @@
 <span class="kw">use</span> <span class="ident">frame_support</span>::{
 	<span class="ident">dispatch::PostDispatchInfo</span>,
 	<span class="ident">traits</span>::{<span class="ident">IsSubType</span>, <span class="ident">OriginTrait</span>, <span class="ident">UnfilteredDispatchable</span>},
-	<span class="ident">transactional</span>,
 	<span class="ident">weights</span>::{<span class="ident">extract_actual_weight</span>, <span class="ident">GetDispatchInfo</span>},
 };
 <span class="kw">use</span> <span class="ident">sp_core::TypeId</span>;
@@ -801,7 +798,6 @@
 			};
 			(<span class="ident">dispatch_weight</span>, <span class="ident">dispatch_class</span>)
 		})]</span>
-		<span class="attribute">#[<span class="ident">transactional</span>]</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">batch_all</span>(
 			<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
 			<span class="ident">calls</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span><span class="ident">::Call</span><span class="op">&gt;</span>,

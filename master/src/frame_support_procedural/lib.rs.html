@@ -1023,6 +1023,12 @@
 	<span class="ident">transactional::transactional</span>(<span class="ident">attr</span>, <span class="ident">input</span>).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">to_compile_error</span>().<span class="ident">into</span>())
 }
 
+<span class="attribute">#[<span class="ident">proc_macro_attribute</span>]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_transactional</span>(<span class="ident">attr</span>: <span class="ident">TokenStream</span>, <span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
+	<span class="ident">transactional::require_transactional</span>(<span class="ident">attr</span>, <span class="ident">input</span>)
+		.<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">to_compile_error</span>().<span class="ident">into</span>())
+}
+
 <span class="doccomment">/// Derive [`Clone`] but do not bound any generic. Docs are at `frame_support::CloneNoBound`.</span>
 <span class="attribute">#[<span class="ident">proc_macro_derive</span>(<span class="ident">CloneNoBound</span>)]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">derive_clone_no_bound</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
@@ -1098,12 +1104,6 @@
 <span class="attribute">#[<span class="ident">proc_macro_derive</span>(<span class="ident">DefaultNoBound</span>)]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">derive_default_no_bound</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
 	<span class="ident">default_no_bound::derive_default_no_bound</span>(<span class="ident">input</span>)
-}
-
-<span class="attribute">#[<span class="ident">proc_macro_attribute</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_transactional</span>(<span class="ident">attr</span>: <span class="ident">TokenStream</span>, <span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
-	<span class="ident">transactional::require_transactional</span>(<span class="ident">attr</span>, <span class="ident">input</span>)
-		.<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">to_compile_error</span>().<span class="ident">into</span>())
 }
 
 <span class="attribute">#[<span class="ident">proc_macro</span>]</span>

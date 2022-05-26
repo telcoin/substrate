@@ -2876,6 +2876,11 @@
 <span id="2871">2871</span>
 <span id="2872">2872</span>
 <span id="2873">2873</span>
+<span id="2874">2874</span>
+<span id="2875">2875</span>
+<span id="2876">2876</span>
+<span id="2877">2877</span>
+<span id="2878">2878</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2017-2022 Parity Technologies (UK) Ltd.</span>
@@ -2905,7 +2910,8 @@
 		<span class="ident">result</span>,
 	},
 	<span class="ident">traits</span>::{
-		<span class="ident">CallMetadata</span>, <span class="ident">GetCallMetadata</span>, <span class="ident">GetCallName</span>, <span class="ident">GetStorageVersion</span>, <span class="ident">UnfilteredDispatchable</span>,
+		<span class="ident">CallMetadata</span>, <span class="ident">DispatchableWithStorageLayer</span>, <span class="ident">GetCallMetadata</span>, <span class="ident">GetCallName</span>,
+		<span class="ident">GetStorageVersion</span>, <span class="ident">UnfilteredDispatchable</span>,
 	},
 	<span class="ident">weights</span>::{
 		<span class="ident">ClassifyDispatch</span>, <span class="ident">DispatchInfo</span>, <span class="ident">GetDispatchInfo</span>, <span class="ident">PaysFee</span>, <span class="ident">PostDispatchInfo</span>,
@@ -4347,7 +4353,11 @@
 		<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ignore</span>:<span class="ident">ident</span>
 		<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mod_type</span>:<span class="ident">ident</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_instance</span>:<span class="ident">ident</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">instance</span>:<span class="ident">ident</span>)<span class="question-mark">?</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">fn_name</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">origin</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">system</span>:<span class="ident">ident</span> [ $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_name</span>:<span class="ident">ident</span>),<span class="op">*</span> ]
 	) =&gt; {
-		<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">mod_type</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_instance</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">instance</span>)<span class="question-mark">?</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">fn_name</span>( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">origin</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_name</span> )<span class="op">*</span> ).<span class="ident">map</span>(<span class="ident">Into::into</span>).<span class="ident">map_err</span>(<span class="ident">Into::into</span>)
+			<span class="comment">// We execute all dispatchable in at least one storage layer, allowing them</span>
+			<span class="comment">// to return an error at any point, and undoing any storage changes.</span>
+			<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::storage::in_storage_layer</span>(<span class="op">|</span><span class="op">|</span> {
+				<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">mod_type</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_instance</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">instance</span>)<span class="question-mark">?</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">fn_name</span>( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">origin</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_name</span> )<span class="op">*</span> ).<span class="ident">map</span>(<span class="ident">Into::into</span>).<span class="ident">map_err</span>(<span class="ident">Into::into</span>)
+			})
 	};
 
 	<span class="comment">// no `deposit_event` function wanted</span>
