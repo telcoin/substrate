@@ -92,9 +92,9 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PruningParams</span> {
 	<span class="doccomment">/// Specify the state pruning mode, a number of blocks to keep or &#39;archive&#39;.</span>
 	<span class="doccomment">///</span>
-	<span class="doccomment">/// Default is to keep all block states if the node is running as a</span>
-	<span class="doccomment">/// validator (i.e. &#39;archive&#39;), otherwise state is only kept for the last</span>
-	<span class="doccomment">/// 256 blocks.</span>
+	<span class="doccomment">/// Default is to keep only the last 256 blocks,</span>
+	<span class="doccomment">/// otherwise, the state can be kept for all of the blocks (i.e &#39;archive&#39;),</span>
+	<span class="doccomment">/// or for all of the canonical blocks (i.e &#39;archive-canonical&#39;).</span>
 	<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PRUNING_MODE&quot;</span>)]</span>
 	<span class="kw">pub</span> <span class="ident">pruning</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 	<span class="doccomment">/// Specify the number of finalized blocks to keep in the database.</span>
