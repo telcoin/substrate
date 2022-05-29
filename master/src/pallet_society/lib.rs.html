@@ -1826,6 +1826,9 @@
 <span id="1821">1821</span>
 <span id="1822">1822</span>
 <span id="1823">1823</span>
+<span id="1824">1824</span>
+<span id="1825">1825</span>
+<span id="1826">1826</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2020-2022 Parity Technologies (UK) Ltd.</span>
@@ -2895,6 +2898,7 @@
 			<span class="ident">Founder</span>::<span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">I</span><span class="op">&gt;</span><span class="ident">::kill</span>();
 			<span class="ident">Rules</span>::<span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">I</span><span class="op">&gt;</span><span class="ident">::kill</span>();
 			<span class="ident">Candidates</span>::<span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">I</span><span class="op">&gt;</span><span class="ident">::kill</span>();
+			<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
 			<span class="ident">SuspendedCandidates</span>::<span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">I</span><span class="op">&gt;</span><span class="ident">::remove_all</span>(<span class="prelude-val">None</span>);
 			<span class="ident"><span class="self">Self</span>::deposit_event</span>(<span class="ident">Event</span>::<span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">I</span><span class="op">&gt;</span><span class="ident">::Unfounded</span> { <span class="ident">founder</span> });
 			<span class="prelude-val">Ok</span>(())
@@ -3339,6 +3343,7 @@
 				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
 
 			<span class="comment">// Clean up all votes.</span>
+			<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
 			<span class="op">&lt;</span><span class="ident">Votes</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::remove_all</span>(<span class="prelude-val">None</span>);
 
 			<span class="comment">// Reward one of the voters who voted the right way.</span>
@@ -3523,6 +3528,7 @@
 				}
 
 				<span class="comment">// Clean up all votes.</span>
+				<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
 				<span class="op">&lt;</span><span class="ident">DefenderVotes</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::remove_all</span>(<span class="prelude-val">None</span>);
 			}
 

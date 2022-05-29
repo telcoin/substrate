@@ -237,6 +237,8 @@
 <span id="232">232</span>
 <span id="233">233</span>
 <span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2020-2022 Parity Technologies (UK) Ltd.</span>
@@ -275,9 +277,11 @@
 
 <span class="doccomment">/// This function removes all validators and nominators from storage.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_validators_and_nominators</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span>() {
+	<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
 	<span class="ident">Validators</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::remove_all</span>();
 
 	<span class="comment">// whenever we touch nominators counter we should update `T::VoterList` as well.</span>
+	<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
 	<span class="ident">Nominators</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::remove_all</span>();
 
 	<span class="comment">// NOTE: safe to call outside block production</span>

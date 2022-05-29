@@ -346,12 +346,12 @@
 <span class="kw">use</span> <span class="ident">codec</span>::{<span class="ident">Decode</span>, <span class="ident">Encode</span>, <span class="ident">MaxEncodedLen</span>};
 <span class="kw">use</span> <span class="ident">frame_support</span>::{
 	<span class="ident">dispatch</span>::{<span class="ident">DispatchError</span>, <span class="ident">DispatchResult</span>},
-	<span class="ident">storage::child</span>::{<span class="self">self</span>, <span class="ident">ChildInfo</span>, <span class="ident">KillStorageResult</span>},
+	<span class="ident">storage::child</span>::{<span class="self">self</span>, <span class="ident">ChildInfo</span>},
 	<span class="ident">weights::Weight</span>,
 };
 <span class="kw">use</span> <span class="ident">scale_info::TypeInfo</span>;
 <span class="kw">use</span> <span class="ident">sp_core::crypto::UncheckedFrom</span>;
-<span class="kw">use</span> <span class="ident">sp_io::hashing::blake2_256</span>;
+<span class="kw">use</span> <span class="ident">sp_io</span>::{<span class="ident">hashing::blake2_256</span>, <span class="ident">KillStorageResult</span>};
 <span class="kw">use</span> <span class="ident">sp_runtime</span>::{
 	<span class="ident">traits</span>::{<span class="ident">Hash</span>, <span class="ident">Zero</span>},
 	<span class="ident">RuntimeDebug</span>,
@@ -585,16 +585,16 @@
 		<span class="kw">while</span> <span class="op">!</span><span class="ident">queue</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="ident">remaining_key_budget</span> <span class="op">&gt;</span> <span class="number">0</span> {
 			<span class="comment">// Cannot panic due to loop condition</span>
 			<span class="kw">let</span> <span class="ident">trie</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">queue</span>[<span class="number">0</span>];
-			<span class="kw">let</span> <span class="ident">outcome</span> <span class="op">=</span>
-				<span class="ident">child::kill_storage</span>(<span class="kw-2">&amp;</span><span class="ident">child_trie_info</span>(<span class="kw-2">&amp;</span><span class="ident">trie</span>.<span class="ident">trie_id</span>), <span class="prelude-val">Some</span>(<span class="ident">remaining_key_budget</span>));
+			<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
+			<span class="kw">let</span> <span class="ident">outcome</span> <span class="op">=</span> <span class="ident">child::kill_storage</span>(<span class="kw-2">&amp;</span><span class="ident">child_trie_info</span>(<span class="kw-2">&amp;</span><span class="ident">trie</span>.<span class="ident">trie_id</span>), <span class="prelude-val">Some</span>(<span class="ident">remaining_key_budget</span>));
 			<span class="kw">let</span> <span class="ident">keys_removed</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">outcome</span> {
 				<span class="comment">// This happens when our budget wasn&#39;t large enough to remove all keys.</span>
-				<span class="ident">KillStorageResult::SomeRemaining</span>(<span class="ident">count</span>) =&gt; <span class="ident">count</span>,
-				<span class="ident">KillStorageResult::AllRemoved</span>(<span class="ident">count</span>) =&gt; {
+				<span class="ident">KillStorageResult::SomeRemaining</span>(<span class="ident">c</span>) =&gt; <span class="ident">c</span>,
+				<span class="ident">KillStorageResult::AllRemoved</span>(<span class="ident">c</span>) =&gt; {
 					<span class="comment">// We do not care to preserve order. The contract is deleted already and</span>
 					<span class="comment">// no one waits for the trie to be deleted.</span>
 					<span class="ident">queue</span>.<span class="ident">swap_remove</span>(<span class="number">0</span>);
-					<span class="ident">count</span>
+					<span class="ident">c</span>
 				},
 			};
 			<span class="ident">remaining_key_budget</span> <span class="op">=</span> <span class="ident">remaining_key_budget</span>.<span class="ident">saturating_sub</span>(<span class="ident">keys_removed</span>);
