@@ -1667,6 +1667,29 @@
 <span id="1662">1662</span>
 <span id="1663">1663</span>
 <span id="1664">1664</span>
+<span id="1665">1665</span>
+<span id="1666">1666</span>
+<span id="1667">1667</span>
+<span id="1668">1668</span>
+<span id="1669">1669</span>
+<span id="1670">1670</span>
+<span id="1671">1671</span>
+<span id="1672">1672</span>
+<span id="1673">1673</span>
+<span id="1674">1674</span>
+<span id="1675">1675</span>
+<span id="1676">1676</span>
+<span id="1677">1677</span>
+<span id="1678">1678</span>
+<span id="1679">1679</span>
+<span id="1680">1680</span>
+<span id="1681">1681</span>
+<span id="1682">1682</span>
+<span id="1683">1683</span>
+<span id="1684">1684</span>
+<span id="1685">1685</span>
+<span id="1686">1686</span>
+<span id="1687">1687</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2017-2022 Parity Technologies (UK) Ltd.</span>
@@ -1735,6 +1758,8 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">serde::Serialize</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident">sp_runtime::traits::TrailingZeroInput</span>;
 <span class="kw">use</span> <span class="ident">sp_runtime</span>::{
 	<span class="ident">generic</span>,
 	<span class="ident">traits</span>::{
@@ -1755,7 +1780,7 @@
 	<span class="ident">storage</span>,
 	<span class="ident">traits</span>::{
 		<span class="ident">ConstU32</span>, <span class="ident">Contains</span>, <span class="ident">EnsureOrigin</span>, <span class="ident">Get</span>, <span class="ident">HandleLifetime</span>, <span class="ident">OnKilledAccount</span>, <span class="ident">OnNewAccount</span>,
-		<span class="ident">OriginTrait</span>, <span class="ident">PalletInfo</span>, <span class="ident">SortedMembers</span>, <span class="ident">StoredMap</span>,
+		<span class="ident">OriginTrait</span>, <span class="ident">PalletInfo</span>, <span class="ident">SortedMembers</span>, <span class="ident">StoredMap</span>, <span class="ident">TypedGet</span>,
 	},
 	<span class="ident">weights</span>::{
 		<span class="ident">extract_actual_weight</span>, <span class="ident">DispatchClass</span>, <span class="ident">DispatchInfo</span>, <span class="ident">PerDispatchClass</span>, <span class="ident">RuntimeDbWeight</span>,
@@ -2451,8 +2476,31 @@
 	}
 
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
-	<span class="kw">fn</span> <span class="ident">successful_origin</span>() -&gt; <span class="ident">O</span> {
-		<span class="ident">O::from</span>(<span class="ident">RawOrigin::Root</span>)
+	<span class="kw">fn</span> <span class="ident">try_successful_origin</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">O</span>, ()<span class="op">&gt;</span> {
+		<span class="prelude-val">Ok</span>(<span class="ident">O::from</span>(<span class="ident">RawOrigin::Root</span>))
+	}
+}
+
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EnsureRootWithSuccess</span><span class="op">&lt;</span><span class="ident">AccountId</span>, <span class="ident">Success</span><span class="op">&gt;</span>(
+	<span class="ident">sp_std::marker::PhantomData</span><span class="op">&lt;</span>(<span class="ident">AccountId</span>, <span class="ident">Success</span>)<span class="op">&gt;</span>,
+);
+<span class="kw">impl</span><span class="op">&lt;</span>
+		<span class="ident">O</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">RawOrigin</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span>, <span class="ident">O</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">RawOrigin</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+		<span class="ident">AccountId</span>,
+		<span class="ident">Success</span>: <span class="ident">TypedGet</span>,
+	<span class="op">&gt;</span> <span class="ident">EnsureOrigin</span><span class="op">&lt;</span><span class="ident">O</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">EnsureRootWithSuccess</span><span class="op">&lt;</span><span class="ident">AccountId</span>, <span class="ident">Success</span><span class="op">&gt;</span>
+{
+	<span class="kw">type</span> <span class="ident">Success</span> <span class="op">=</span> <span class="ident">Success::Type</span>;
+	<span class="kw">fn</span> <span class="ident">try_origin</span>(<span class="ident">o</span>: <span class="ident">O</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Success</span>, <span class="ident">O</span><span class="op">&gt;</span> {
+		<span class="ident">o</span>.<span class="ident">into</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">o</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">o</span> {
+			<span class="ident">RawOrigin::Root</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Success::get</span>()),
+			<span class="ident">r</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">O::from</span>(<span class="ident">r</span>)),
+		})
+	}
+
+	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
+	<span class="kw">fn</span> <span class="ident">try_successful_origin</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">O</span>, ()<span class="op">&gt;</span> {
+		<span class="prelude-val">Ok</span>(<span class="ident">O::from</span>(<span class="ident">RawOrigin::Root</span>))
 	}
 }
 
@@ -2469,11 +2517,10 @@
 	}
 
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
-	<span class="kw">fn</span> <span class="ident">successful_origin</span>() -&gt; <span class="ident">O</span> {
+	<span class="kw">fn</span> <span class="ident">try_successful_origin</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">O</span>, ()<span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">zero_account_id</span> <span class="op">=</span>
-			<span class="ident">AccountId::decode</span>(<span class="kw-2">&amp;mut</span> <span class="ident">sp_runtime::traits::TrailingZeroInput::zeroes</span>())
-				.<span class="ident">expect</span>(<span class="string">&quot;infinite length input; no invalid inputs for type; qed&quot;</span>);
-		<span class="ident">O::from</span>(<span class="ident">RawOrigin::Signed</span>(<span class="ident">zero_account_id</span>))
+			<span class="ident">AccountId::decode</span>(<span class="kw-2">&amp;mut</span> <span class="ident">TrailingZeroInput::zeroes</span>()).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())<span class="question-mark">?</span>;
+		<span class="prelude-val">Ok</span>(<span class="ident">O::from</span>(<span class="ident">RawOrigin::Signed</span>(<span class="ident">zero_account_id</span>)))
 	}
 }
 
@@ -2493,16 +2540,15 @@
 	}
 
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
-	<span class="kw">fn</span> <span class="ident">successful_origin</span>() -&gt; <span class="ident">O</span> {
+	<span class="kw">fn</span> <span class="ident">try_successful_origin</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">O</span>, ()<span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">zero_account_id</span> <span class="op">=</span>
-			<span class="ident">AccountId::decode</span>(<span class="kw-2">&amp;mut</span> <span class="ident">sp_runtime::traits::TrailingZeroInput::zeroes</span>())
-				.<span class="ident">expect</span>(<span class="string">&quot;infinite length input; no invalid inputs for type; qed&quot;</span>);
+			<span class="ident">AccountId::decode</span>(<span class="kw-2">&amp;mut</span> <span class="ident">TrailingZeroInput::zeroes</span>()).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())<span class="question-mark">?</span>;
 		<span class="kw">let</span> <span class="ident">members</span> <span class="op">=</span> <span class="ident">Who::sorted_members</span>();
 		<span class="kw">let</span> <span class="ident">first_member</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">members</span>.<span class="ident">get</span>(<span class="number">0</span>) {
 			<span class="prelude-val">Some</span>(<span class="ident">account</span>) =&gt; <span class="ident">account</span>.<span class="ident">clone</span>(),
 			<span class="prelude-val">None</span> =&gt; <span class="ident">zero_account_id</span>,
 		};
-		<span class="ident">O::from</span>(<span class="ident">RawOrigin::Signed</span>(<span class="ident">first_member</span>))
+		<span class="prelude-val">Ok</span>(<span class="ident">O::from</span>(<span class="ident">RawOrigin::Signed</span>(<span class="ident">first_member</span>)))
 	}
 }
 
@@ -2519,8 +2565,8 @@
 	}
 
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
-	<span class="kw">fn</span> <span class="ident">successful_origin</span>() -&gt; <span class="ident">O</span> {
-		<span class="ident">O::from</span>(<span class="ident">RawOrigin::None</span>)
+	<span class="kw">fn</span> <span class="ident">try_successful_origin</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">O</span>, ()<span class="op">&gt;</span> {
+		<span class="prelude-val">Ok</span>(<span class="ident">O::from</span>(<span class="ident">RawOrigin::None</span>))
 	}
 }
 
@@ -2532,8 +2578,8 @@
 	}
 
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
-	<span class="kw">fn</span> <span class="ident">successful_origin</span>() -&gt; <span class="ident">O</span> {
-		<span class="macro">unimplemented!</span>()
+	<span class="kw">fn</span> <span class="ident">try_successful_origin</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">O</span>, ()<span class="op">&gt;</span> {
+		<span class="prelude-val">Err</span>(())
 	}
 }
 

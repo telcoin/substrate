@@ -2065,6 +2065,9 @@
 <span id="2060">2060</span>
 <span id="2061">2061</span>
 <span id="2062">2062</span>
+<span id="2063">2063</span>
+<span id="2064">2064</span>
+<span id="2065">2065</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2018-2022 Parity Technologies (UK) Ltd.</span>
@@ -2098,7 +2101,7 @@
 	<span class="ident">pallet_prelude::Get</span>,
 	<span class="ident">parameter_types</span>,
 	<span class="ident">traits</span>::{
-		<span class="ident">AsEnsureOriginWithArg</span>, <span class="ident">ConstU128</span>, <span class="ident">ConstU16</span>, <span class="ident">ConstU32</span>, <span class="ident">Currency</span>, <span class="ident">EnsureOneOf</span>,
+		<span class="ident">AsEnsureOriginWithArg</span>, <span class="ident">ConstU128</span>, <span class="ident">ConstU16</span>, <span class="ident">ConstU32</span>, <span class="ident">Currency</span>, <span class="ident">EitherOfDiverse</span>,
 		<span class="ident">EqualPrivilegeOnly</span>, <span class="ident">Everything</span>, <span class="ident">Imbalance</span>, <span class="ident">InstanceFilter</span>, <span class="ident">KeyOwnerProofSystem</span>,
 		<span class="ident">LockIdentifier</span>, <span class="ident">Nothing</span>, <span class="ident">OnUnbalanced</span>, <span class="ident">U128CurrencyToVote</span>,
 	},
@@ -2617,7 +2620,7 @@
 	<span class="kw">type</span> <span class="ident">BondingDuration</span> <span class="op">=</span> <span class="ident">BondingDuration</span>;
 	<span class="kw">type</span> <span class="ident">SlashDeferDuration</span> <span class="op">=</span> <span class="ident">SlashDeferDuration</span>;
 	<span class="doccomment">/// A super-majority of the council can cancel the slash.</span>
-	<span class="kw">type</span> <span class="ident">SlashCancelOrigin</span> <span class="op">=</span> <span class="ident">EnsureOneOf</span><span class="op">&lt;</span>
+	<span class="kw">type</span> <span class="ident">SlashCancelOrigin</span> <span class="op">=</span> <span class="ident">EitherOfDiverse</span><span class="op">&lt;</span>
 		<span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span>,
 		<span class="ident">pallet_collective::EnsureProportionAtLeast</span><span class="op">&lt;</span><span class="ident">AccountId</span>, <span class="ident">CouncilCollective</span>, <span class="number">3</span>, <span class="number">4</span><span class="op">&gt;</span>,
 	<span class="op">&gt;</span>;
@@ -2861,12 +2864,14 @@
 				<span class="ident">confirm_period</span>: <span class="number">2</span>,
 				<span class="ident">min_enactment_period</span>: <span class="number">4</span>,
 				<span class="ident">min_approval</span>: <span class="ident">pallet_referenda::Curve::LinearDecreasing</span> {
-					<span class="ident">begin</span>: <span class="ident">Perbill::from_percent</span>(<span class="number">100</span>),
-					<span class="ident">delta</span>: <span class="ident">Perbill::from_percent</span>(<span class="number">50</span>),
+					<span class="ident">length</span>: <span class="ident">Perbill::from_percent</span>(<span class="number">100</span>),
+					<span class="ident">floor</span>: <span class="ident">Perbill::from_percent</span>(<span class="number">50</span>),
+					<span class="ident">ceil</span>: <span class="ident">Perbill::from_percent</span>(<span class="number">100</span>),
 				},
-				<span class="ident">min_turnout</span>: <span class="ident">pallet_referenda::Curve::LinearDecreasing</span> {
-					<span class="ident">begin</span>: <span class="ident">Perbill::from_percent</span>(<span class="number">100</span>),
-					<span class="ident">delta</span>: <span class="ident">Perbill::from_percent</span>(<span class="number">100</span>),
+				<span class="ident">min_support</span>: <span class="ident">pallet_referenda::Curve::LinearDecreasing</span> {
+					<span class="ident">length</span>: <span class="ident">Perbill::from_percent</span>(<span class="number">100</span>),
+					<span class="ident">floor</span>: <span class="ident">Perbill::from_percent</span>(<span class="number">0</span>),
+					<span class="ident">ceil</span>: <span class="ident">Perbill::from_percent</span>(<span class="number">100</span>),
 				},
 			},
 		)];
@@ -2949,7 +2954,7 @@
 		<span class="ident">pallet_collective::EnsureProportionAtLeast</span><span class="op">&lt;</span><span class="ident">AccountId</span>, <span class="ident">CouncilCollective</span>, <span class="number">2</span>, <span class="number">3</span><span class="op">&gt;</span>;
 	<span class="comment">// To cancel a proposal before it has been passed, the technical committee must be unanimous or</span>
 	<span class="comment">// Root must agree.</span>
-	<span class="kw">type</span> <span class="ident">CancelProposalOrigin</span> <span class="op">=</span> <span class="ident">EnsureOneOf</span><span class="op">&lt;</span>
+	<span class="kw">type</span> <span class="ident">CancelProposalOrigin</span> <span class="op">=</span> <span class="ident">EitherOfDiverse</span><span class="op">&lt;</span>
 		<span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span>,
 		<span class="ident">pallet_collective::EnsureProportionAtLeast</span><span class="op">&lt;</span><span class="ident">AccountId</span>, <span class="ident">TechnicalCollective</span>, <span class="number">1</span>, <span class="number">1</span><span class="op">&gt;</span>,
 	<span class="op">&gt;</span>;
@@ -3039,7 +3044,7 @@
 	<span class="kw">type</span> <span class="ident">WeightInfo</span> <span class="op">=</span> <span class="ident">pallet_collective::weights::SubstrateWeight</span><span class="op">&lt;</span><span class="ident">Runtime</span><span class="op">&gt;</span>;
 }
 
-<span class="kw">type</span> <span class="ident">EnsureRootOrHalfCouncil</span> <span class="op">=</span> <span class="ident">EnsureOneOf</span><span class="op">&lt;</span>
+<span class="kw">type</span> <span class="ident">EnsureRootOrHalfCouncil</span> <span class="op">=</span> <span class="ident">EitherOfDiverse</span><span class="op">&lt;</span>
 	<span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span>,
 	<span class="ident">pallet_collective::EnsureProportionMoreThan</span><span class="op">&lt;</span><span class="ident">AccountId</span>, <span class="ident">CouncilCollective</span>, <span class="number">1</span>, <span class="number">2</span><span class="op">&gt;</span>,
 <span class="op">&gt;</span>;
@@ -3073,11 +3078,11 @@
 <span class="kw">impl</span> <span class="ident">pallet_treasury::Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
 	<span class="kw">type</span> <span class="ident">PalletId</span> <span class="op">=</span> <span class="ident">TreasuryPalletId</span>;
 	<span class="kw">type</span> <span class="ident">Currency</span> <span class="op">=</span> <span class="ident">Balances</span>;
-	<span class="kw">type</span> <span class="ident">ApproveOrigin</span> <span class="op">=</span> <span class="ident">EnsureOneOf</span><span class="op">&lt;</span>
+	<span class="kw">type</span> <span class="ident">ApproveOrigin</span> <span class="op">=</span> <span class="ident">EitherOfDiverse</span><span class="op">&lt;</span>
 		<span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span>,
 		<span class="ident">pallet_collective::EnsureProportionAtLeast</span><span class="op">&lt;</span><span class="ident">AccountId</span>, <span class="ident">CouncilCollective</span>, <span class="number">3</span>, <span class="number">5</span><span class="op">&gt;</span>,
 	<span class="op">&gt;</span>;
-	<span class="kw">type</span> <span class="ident">RejectOrigin</span> <span class="op">=</span> <span class="ident">EnsureOneOf</span><span class="op">&lt;</span>
+	<span class="kw">type</span> <span class="ident">RejectOrigin</span> <span class="op">=</span> <span class="ident">EitherOfDiverse</span><span class="op">&lt;</span>
 		<span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span>,
 		<span class="ident">pallet_collective::EnsureProportionMoreThan</span><span class="op">&lt;</span><span class="ident">AccountId</span>, <span class="ident">CouncilCollective</span>, <span class="number">1</span>, <span class="number">2</span><span class="op">&gt;</span>,
 	<span class="op">&gt;</span>;
@@ -3092,6 +3097,7 @@
 	<span class="kw">type</span> <span class="ident">SpendFunds</span> <span class="op">=</span> <span class="ident">Bounties</span>;
 	<span class="kw">type</span> <span class="ident">WeightInfo</span> <span class="op">=</span> <span class="ident">pallet_treasury::weights::SubstrateWeight</span><span class="op">&lt;</span><span class="ident">Runtime</span><span class="op">&gt;</span>;
 	<span class="kw">type</span> <span class="ident">MaxApprovals</span> <span class="op">=</span> <span class="ident">MaxApprovals</span>;
+	<span class="kw">type</span> <span class="ident">SpendOrigin</span> <span class="op">=</span> <span class="ident">frame_support::traits::NeverEnsureOrigin</span><span class="op">&lt;</span><span class="ident">u128</span><span class="op">&gt;</span>;
 }
 
 <span class="macro">parameter_types!</span> {

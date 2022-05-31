@@ -240,6 +240,11 @@
 <span id="235">235</span>
 <span id="236">236</span>
 <span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2017-2022 Parity Technologies (UK) Ltd.</span>
@@ -259,18 +264,16 @@
 
 <span class="doccomment">//! Miscellaneous additional datatypes.</span>
 
-<span class="kw">use</span> <span class="ident">sp_std::marker::PhantomData</span>;
-
 <span class="kw">use</span> <span class="ident">codec</span>::{<span class="ident">Codec</span>, <span class="ident">Decode</span>, <span class="ident">Encode</span>, <span class="ident">MaxEncodedLen</span>};
 <span class="kw">use</span> <span class="ident">frame_support</span>::{
-	<span class="ident">traits::VoteTally</span>, <span class="ident">CloneNoBound</span>, <span class="ident">DefaultNoBound</span>, <span class="ident">EqNoBound</span>, <span class="ident">PartialEqNoBound</span>,
-	<span class="ident">RuntimeDebugNoBound</span>,
+	<span class="ident">traits::VoteTally</span>, <span class="ident">CloneNoBound</span>, <span class="ident">EqNoBound</span>, <span class="ident">PartialEqNoBound</span>, <span class="ident">RuntimeDebugNoBound</span>,
 };
 <span class="kw">use</span> <span class="ident">scale_info::TypeInfo</span>;
 <span class="kw">use</span> <span class="ident">sp_runtime</span>::{
 	<span class="ident">traits</span>::{<span class="ident">Saturating</span>, <span class="ident">Zero</span>},
 	<span class="ident">RuntimeDebug</span>,
 };
+<span class="kw">use</span> <span class="ident">sp_std</span>::{<span class="ident">fmt::Debug</span>, <span class="ident">marker::PhantomData</span>};
 
 <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">AccountVote</span>, <span class="ident">Conviction</span>, <span class="ident">Vote</span>};
@@ -278,7 +281,6 @@
 <span class="doccomment">/// Info regarding an ongoing referendum.</span>
 <span class="attribute">#[<span class="ident">derive</span>(
 	<span class="ident">CloneNoBound</span>,
-	<span class="ident">DefaultNoBound</span>,
 	<span class="ident">PartialEqNoBound</span>,
 	<span class="ident">EqNoBound</span>,
 	<span class="ident">RuntimeDebugNoBound</span>,
@@ -288,84 +290,84 @@
 	<span class="ident">MaxEncodedLen</span>,
 )]</span>
 <span class="attribute">#[<span class="ident">scale_info</span>(<span class="ident">skip_type_params</span>(<span class="ident">Total</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Tally</span><span class="op">&lt;</span>
-	<span class="ident">Votes</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Default</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">sp_std::fmt::Debug</span> <span class="op">+</span> <span class="ident">TypeInfo</span> <span class="op">+</span> <span class="ident">Codec</span>,
-	<span class="ident">Total</span>,
-<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Tally</span><span class="op">&lt;</span><span class="ident">Votes</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">TypeInfo</span> <span class="op">+</span> <span class="ident">Codec</span>, <span class="ident">Total</span><span class="op">&gt;</span> {
 	<span class="doccomment">/// The number of aye votes, expressed in terms of post-conviction lock-vote.</span>
 	<span class="kw">pub</span> <span class="ident">ayes</span>: <span class="ident">Votes</span>,
 	<span class="doccomment">/// The number of nay votes, expressed in terms of post-conviction lock-vote.</span>
 	<span class="kw">pub</span> <span class="ident">nays</span>: <span class="ident">Votes</span>,
-	<span class="doccomment">/// The amount of funds currently expressing its opinion. Pre-conviction.</span>
-	<span class="kw">pub</span> <span class="ident">turnout</span>: <span class="ident">Votes</span>,
+	<span class="doccomment">/// The basic number of aye votes, expressed pre-conviction.</span>
+	<span class="kw">pub</span> <span class="ident">support</span>: <span class="ident">Votes</span>,
 	<span class="doccomment">/// Dummy.</span>
 	<span class="ident">dummy</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">Total</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span>
-		<span class="ident">Votes</span>: <span class="ident">Clone</span>
-			<span class="op">+</span> <span class="ident">Default</span>
-			<span class="op">+</span> <span class="ident">PartialEq</span>
-			<span class="op">+</span> <span class="ident">Eq</span>
-			<span class="op">+</span> <span class="ident">sp_std::fmt::Debug</span>
-			<span class="op">+</span> <span class="ident">Copy</span>
-			<span class="op">+</span> <span class="ident">AtLeast32BitUnsigned</span>
-			<span class="op">+</span> <span class="ident">TypeInfo</span>
-			<span class="op">+</span> <span class="ident">Codec</span>,
+		<span class="ident">Votes</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Default</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">AtLeast32BitUnsigned</span> <span class="op">+</span> <span class="ident">TypeInfo</span> <span class="op">+</span> <span class="ident">Codec</span>,
 		<span class="ident">Total</span>: <span class="ident">Get</span><span class="op">&lt;</span><span class="ident">Votes</span><span class="op">&gt;</span>,
-	<span class="op">&gt;</span> <span class="ident">VoteTally</span><span class="op">&lt;</span><span class="ident">Votes</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Tally</span><span class="op">&lt;</span><span class="ident">Votes</span>, <span class="ident">Total</span><span class="op">&gt;</span>
+		<span class="ident">Class</span>,
+	<span class="op">&gt;</span> <span class="ident">VoteTally</span><span class="op">&lt;</span><span class="ident">Votes</span>, <span class="ident">Class</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Tally</span><span class="op">&lt;</span><span class="ident">Votes</span>, <span class="ident">Total</span><span class="op">&gt;</span>
 {
-	<span class="kw">fn</span> <span class="ident">ayes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Votes</span> {
+	<span class="kw">fn</span> <span class="ident">new</span>(<span class="kw">_</span>: <span class="ident">Class</span>) -&gt; <span class="self">Self</span> {
+		<span class="self">Self</span> { <span class="ident">ayes</span>: <span class="ident">Zero::zero</span>(), <span class="ident">nays</span>: <span class="ident">Zero::zero</span>(), <span class="ident">support</span>: <span class="ident">Zero::zero</span>(), <span class="ident">dummy</span>: <span class="ident">PhantomData</span> }
+	}
+
+	<span class="kw">fn</span> <span class="ident">ayes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="ident">Class</span>) -&gt; <span class="ident">Votes</span> {
 		<span class="self">self</span>.<span class="ident">ayes</span>
 	}
 
-	<span class="kw">fn</span> <span class="ident">turnout</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Perbill</span> {
-		<span class="ident">Perbill::from_rational</span>(<span class="self">self</span>.<span class="ident">turnout</span>, <span class="ident">Total::get</span>())
+	<span class="kw">fn</span> <span class="ident">support</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="ident">Class</span>) -&gt; <span class="ident">Perbill</span> {
+		<span class="ident">Perbill::from_rational</span>(<span class="self">self</span>.<span class="ident">support</span>, <span class="ident">Total::get</span>())
 	}
 
-	<span class="kw">fn</span> <span class="ident">approval</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Perbill</span> {
+	<span class="kw">fn</span> <span class="ident">approval</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="ident">Class</span>) -&gt; <span class="ident">Perbill</span> {
 		<span class="ident">Perbill::from_rational</span>(<span class="self">self</span>.<span class="ident">ayes</span>, <span class="self">self</span>.<span class="ident">ayes</span>.<span class="ident">saturating_add</span>(<span class="self">self</span>.<span class="ident">nays</span>))
 	}
 
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
-	<span class="kw">fn</span> <span class="ident">unanimity</span>() -&gt; <span class="self">Self</span> {
-		<span class="self">Self</span> { <span class="ident">ayes</span>: <span class="ident">Total::get</span>(), <span class="ident">nays</span>: <span class="ident">Zero::zero</span>(), <span class="ident">turnout</span>: <span class="ident">Total::get</span>(), <span class="ident">dummy</span>: <span class="ident">PhantomData</span> }
+	<span class="kw">fn</span> <span class="ident">unanimity</span>(<span class="kw">_</span>: <span class="ident">Class</span>) -&gt; <span class="self">Self</span> {
+		<span class="self">Self</span> { <span class="ident">ayes</span>: <span class="ident">Total::get</span>(), <span class="ident">nays</span>: <span class="ident">Zero::zero</span>(), <span class="ident">support</span>: <span class="ident">Total::get</span>(), <span class="ident">dummy</span>: <span class="ident">PhantomData</span> }
 	}
 
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
-	<span class="kw">fn</span> <span class="ident">from_requirements</span>(<span class="ident">turnout</span>: <span class="ident">Perbill</span>, <span class="ident">approval</span>: <span class="ident">Perbill</span>) -&gt; <span class="self">Self</span> {
-		<span class="kw">let</span> <span class="ident">turnout</span> <span class="op">=</span> <span class="ident">turnout</span>.<span class="ident">mul_ceil</span>(<span class="ident">Total::get</span>());
-		<span class="kw">let</span> <span class="ident">ayes</span> <span class="op">=</span> <span class="ident">approval</span>.<span class="ident">mul_ceil</span>(<span class="ident">turnout</span>);
-		<span class="self">Self</span> { <span class="ident">ayes</span>, <span class="ident">nays</span>: <span class="ident">turnout</span> <span class="op">-</span> <span class="ident">ayes</span>, <span class="ident">turnout</span>, <span class="ident">dummy</span>: <span class="ident">PhantomData</span> }
+	<span class="kw">fn</span> <span class="ident">rejection</span>(<span class="kw">_</span>: <span class="ident">Class</span>) -&gt; <span class="self">Self</span> {
+		<span class="self">Self</span> { <span class="ident">ayes</span>: <span class="ident">Zero::zero</span>(), <span class="ident">nays</span>: <span class="ident">Total::get</span>(), <span class="ident">support</span>: <span class="ident">Total::get</span>(), <span class="ident">dummy</span>: <span class="ident">PhantomData</span> }
+	}
+
+	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
+	<span class="kw">fn</span> <span class="ident">from_requirements</span>(<span class="ident">support</span>: <span class="ident">Perbill</span>, <span class="ident">approval</span>: <span class="ident">Perbill</span>, <span class="kw">_</span>: <span class="ident">Class</span>) -&gt; <span class="self">Self</span> {
+		<span class="kw">let</span> <span class="ident">support</span> <span class="op">=</span> <span class="ident">support</span>.<span class="ident">mul_ceil</span>(<span class="ident">Total::get</span>());
+		<span class="kw">let</span> <span class="ident">ayes</span> <span class="op">=</span> <span class="ident">approval</span>.<span class="ident">mul_ceil</span>(<span class="ident">support</span>);
+		<span class="self">Self</span> { <span class="ident">ayes</span>, <span class="ident">nays</span>: <span class="ident">support</span> <span class="op">-</span> <span class="ident">ayes</span>, <span class="ident">support</span>, <span class="ident">dummy</span>: <span class="ident">PhantomData</span> }
 	}
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span>
-		<span class="ident">Votes</span>: <span class="ident">Clone</span>
-			<span class="op">+</span> <span class="ident">Default</span>
-			<span class="op">+</span> <span class="ident">PartialEq</span>
-			<span class="op">+</span> <span class="ident">Eq</span>
-			<span class="op">+</span> <span class="ident">sp_std::fmt::Debug</span>
-			<span class="op">+</span> <span class="ident">Copy</span>
-			<span class="op">+</span> <span class="ident">AtLeast32BitUnsigned</span>
-			<span class="op">+</span> <span class="ident">TypeInfo</span>
-			<span class="op">+</span> <span class="ident">Codec</span>,
+		<span class="ident">Votes</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Default</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">AtLeast32BitUnsigned</span> <span class="op">+</span> <span class="ident">TypeInfo</span> <span class="op">+</span> <span class="ident">Codec</span>,
 		<span class="ident">Total</span>: <span class="ident">Get</span><span class="op">&lt;</span><span class="ident">Votes</span><span class="op">&gt;</span>,
 	<span class="op">&gt;</span> <span class="ident">Tally</span><span class="op">&lt;</span><span class="ident">Votes</span>, <span class="ident">Total</span><span class="op">&gt;</span>
 {
 	<span class="doccomment">/// Create a new tally.</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">vote</span>: <span class="ident">Vote</span>, <span class="ident">balance</span>: <span class="ident">Votes</span>) -&gt; <span class="self">Self</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_vote</span>(<span class="ident">vote</span>: <span class="ident">Vote</span>, <span class="ident">balance</span>: <span class="ident">Votes</span>) -&gt; <span class="self">Self</span> {
 		<span class="kw">let</span> <span class="ident">Delegations</span> { <span class="ident">votes</span>, <span class="ident">capital</span> } <span class="op">=</span> <span class="ident">vote</span>.<span class="ident">conviction</span>.<span class="ident">votes</span>(<span class="ident">balance</span>);
 		<span class="self">Self</span> {
 			<span class="ident">ayes</span>: <span class="kw">if</span> <span class="ident">vote</span>.<span class="ident">aye</span> { <span class="ident">votes</span> } <span class="kw">else</span> { <span class="ident">Zero::zero</span>() },
 			<span class="ident">nays</span>: <span class="kw">if</span> <span class="ident">vote</span>.<span class="ident">aye</span> { <span class="ident">Zero::zero</span>() } <span class="kw">else</span> { <span class="ident">votes</span> },
-			<span class="ident">turnout</span>: <span class="ident">capital</span>,
+			<span class="ident">support</span>: <span class="ident">capital</span>,
 			<span class="ident">dummy</span>: <span class="ident">PhantomData</span>,
 		}
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_parts</span>(<span class="ident">ayes</span>: <span class="ident">Votes</span>, <span class="ident">nays</span>: <span class="ident">Votes</span>, <span class="ident">turnout</span>: <span class="ident">Votes</span>) -&gt; <span class="self">Self</span> {
-		<span class="self">Self</span> { <span class="ident">ayes</span>, <span class="ident">nays</span>, <span class="ident">turnout</span>, <span class="ident">dummy</span>: <span class="ident">PhantomData</span> }
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_parts</span>(
+		<span class="ident">ayes_with_conviction</span>: <span class="ident">Votes</span>,
+		<span class="ident">nays_with_conviction</span>: <span class="ident">Votes</span>,
+		<span class="ident">ayes</span>: <span class="ident">Votes</span>,
+	) -&gt; <span class="self">Self</span> {
+		<span class="self">Self</span> {
+			<span class="ident">ayes</span>: <span class="ident">ayes_with_conviction</span>,
+			<span class="ident">nays</span>: <span class="ident">nays_with_conviction</span>,
+			<span class="ident">support</span>: <span class="ident">ayes</span>,
+			<span class="ident">dummy</span>: <span class="ident">PhantomData</span>,
+		}
 	}
 
 	<span class="doccomment">/// Add an account&#39;s vote into the tally.</span>
@@ -373,16 +375,18 @@
 		<span class="kw">match</span> <span class="ident">vote</span> {
 			<span class="ident">AccountVote::Standard</span> { <span class="ident">vote</span>, <span class="ident">balance</span> } =&gt; {
 				<span class="kw">let</span> <span class="ident">Delegations</span> { <span class="ident">votes</span>, <span class="ident">capital</span> } <span class="op">=</span> <span class="ident">vote</span>.<span class="ident">conviction</span>.<span class="ident">votes</span>(<span class="ident">balance</span>);
-				<span class="self">self</span>.<span class="ident">turnout</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">turnout</span>.<span class="ident">checked_add</span>(<span class="kw-2">&amp;</span><span class="ident">capital</span>)<span class="question-mark">?</span>;
 				<span class="kw">match</span> <span class="ident">vote</span>.<span class="ident">aye</span> {
-					<span class="bool-val">true</span> =&gt; <span class="self">self</span>.<span class="ident">ayes</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ayes</span>.<span class="ident">checked_add</span>(<span class="kw-2">&amp;</span><span class="ident">votes</span>)<span class="question-mark">?</span>,
+					<span class="bool-val">true</span> =&gt; {
+						<span class="self">self</span>.<span class="ident">support</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">support</span>.<span class="ident">checked_add</span>(<span class="kw-2">&amp;</span><span class="ident">capital</span>)<span class="question-mark">?</span>;
+						<span class="self">self</span>.<span class="ident">ayes</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ayes</span>.<span class="ident">checked_add</span>(<span class="kw-2">&amp;</span><span class="ident">votes</span>)<span class="question-mark">?</span>
+					},
 					<span class="bool-val">false</span> =&gt; <span class="self">self</span>.<span class="ident">nays</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">nays</span>.<span class="ident">checked_add</span>(<span class="kw-2">&amp;</span><span class="ident">votes</span>)<span class="question-mark">?</span>,
 				}
 			},
 			<span class="ident">AccountVote::Split</span> { <span class="ident">aye</span>, <span class="ident">nay</span> } =&gt; {
 				<span class="kw">let</span> <span class="ident">aye</span> <span class="op">=</span> <span class="ident">Conviction::None</span>.<span class="ident">votes</span>(<span class="ident">aye</span>);
 				<span class="kw">let</span> <span class="ident">nay</span> <span class="op">=</span> <span class="ident">Conviction::None</span>.<span class="ident">votes</span>(<span class="ident">nay</span>);
-				<span class="self">self</span>.<span class="ident">turnout</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">turnout</span>.<span class="ident">checked_add</span>(<span class="kw-2">&amp;</span><span class="ident">aye</span>.<span class="ident">capital</span>)<span class="question-mark">?</span>.<span class="ident">checked_add</span>(<span class="kw-2">&amp;</span><span class="ident">nay</span>.<span class="ident">capital</span>)<span class="question-mark">?</span>;
+				<span class="self">self</span>.<span class="ident">support</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">support</span>.<span class="ident">checked_add</span>(<span class="kw-2">&amp;</span><span class="ident">aye</span>.<span class="ident">capital</span>)<span class="question-mark">?</span>;
 				<span class="self">self</span>.<span class="ident">ayes</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ayes</span>.<span class="ident">checked_add</span>(<span class="kw-2">&amp;</span><span class="ident">aye</span>.<span class="ident">votes</span>)<span class="question-mark">?</span>;
 				<span class="self">self</span>.<span class="ident">nays</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">nays</span>.<span class="ident">checked_add</span>(<span class="kw-2">&amp;</span><span class="ident">nay</span>.<span class="ident">votes</span>)<span class="question-mark">?</span>;
 			},
@@ -395,16 +399,18 @@
 		<span class="kw">match</span> <span class="ident">vote</span> {
 			<span class="ident">AccountVote::Standard</span> { <span class="ident">vote</span>, <span class="ident">balance</span> } =&gt; {
 				<span class="kw">let</span> <span class="ident">Delegations</span> { <span class="ident">votes</span>, <span class="ident">capital</span> } <span class="op">=</span> <span class="ident">vote</span>.<span class="ident">conviction</span>.<span class="ident">votes</span>(<span class="ident">balance</span>);
-				<span class="self">self</span>.<span class="ident">turnout</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">turnout</span>.<span class="ident">checked_sub</span>(<span class="kw-2">&amp;</span><span class="ident">capital</span>)<span class="question-mark">?</span>;
 				<span class="kw">match</span> <span class="ident">vote</span>.<span class="ident">aye</span> {
-					<span class="bool-val">true</span> =&gt; <span class="self">self</span>.<span class="ident">ayes</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ayes</span>.<span class="ident">checked_sub</span>(<span class="kw-2">&amp;</span><span class="ident">votes</span>)<span class="question-mark">?</span>,
+					<span class="bool-val">true</span> =&gt; {
+						<span class="self">self</span>.<span class="ident">support</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">support</span>.<span class="ident">checked_sub</span>(<span class="kw-2">&amp;</span><span class="ident">capital</span>)<span class="question-mark">?</span>;
+						<span class="self">self</span>.<span class="ident">ayes</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ayes</span>.<span class="ident">checked_sub</span>(<span class="kw-2">&amp;</span><span class="ident">votes</span>)<span class="question-mark">?</span>
+					},
 					<span class="bool-val">false</span> =&gt; <span class="self">self</span>.<span class="ident">nays</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">nays</span>.<span class="ident">checked_sub</span>(<span class="kw-2">&amp;</span><span class="ident">votes</span>)<span class="question-mark">?</span>,
 				}
 			},
 			<span class="ident">AccountVote::Split</span> { <span class="ident">aye</span>, <span class="ident">nay</span> } =&gt; {
 				<span class="kw">let</span> <span class="ident">aye</span> <span class="op">=</span> <span class="ident">Conviction::None</span>.<span class="ident">votes</span>(<span class="ident">aye</span>);
 				<span class="kw">let</span> <span class="ident">nay</span> <span class="op">=</span> <span class="ident">Conviction::None</span>.<span class="ident">votes</span>(<span class="ident">nay</span>);
-				<span class="self">self</span>.<span class="ident">turnout</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">turnout</span>.<span class="ident">checked_sub</span>(<span class="kw-2">&amp;</span><span class="ident">aye</span>.<span class="ident">capital</span>)<span class="question-mark">?</span>.<span class="ident">checked_sub</span>(<span class="kw-2">&amp;</span><span class="ident">nay</span>.<span class="ident">capital</span>)<span class="question-mark">?</span>;
+				<span class="self">self</span>.<span class="ident">support</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">support</span>.<span class="ident">checked_sub</span>(<span class="kw-2">&amp;</span><span class="ident">aye</span>.<span class="ident">capital</span>)<span class="question-mark">?</span>;
 				<span class="self">self</span>.<span class="ident">ayes</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ayes</span>.<span class="ident">checked_sub</span>(<span class="kw-2">&amp;</span><span class="ident">aye</span>.<span class="ident">votes</span>)<span class="question-mark">?</span>;
 				<span class="self">self</span>.<span class="ident">nays</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">nays</span>.<span class="ident">checked_sub</span>(<span class="kw-2">&amp;</span><span class="ident">nay</span>.<span class="ident">votes</span>)<span class="question-mark">?</span>;
 			},
@@ -414,18 +420,22 @@
 
 	<span class="doccomment">/// Increment some amount of votes.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">increase</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">approve</span>: <span class="ident">bool</span>, <span class="ident">delegations</span>: <span class="ident">Delegations</span><span class="op">&lt;</span><span class="ident">Votes</span><span class="op">&gt;</span>) {
-		<span class="self">self</span>.<span class="ident">turnout</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">turnout</span>.<span class="ident">saturating_add</span>(<span class="ident">delegations</span>.<span class="ident">capital</span>);
 		<span class="kw">match</span> <span class="ident">approve</span> {
-			<span class="bool-val">true</span> =&gt; <span class="self">self</span>.<span class="ident">ayes</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ayes</span>.<span class="ident">saturating_add</span>(<span class="ident">delegations</span>.<span class="ident">votes</span>),
+			<span class="bool-val">true</span> =&gt; {
+				<span class="self">self</span>.<span class="ident">support</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">support</span>.<span class="ident">saturating_add</span>(<span class="ident">delegations</span>.<span class="ident">capital</span>);
+				<span class="self">self</span>.<span class="ident">ayes</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ayes</span>.<span class="ident">saturating_add</span>(<span class="ident">delegations</span>.<span class="ident">votes</span>);
+			},
 			<span class="bool-val">false</span> =&gt; <span class="self">self</span>.<span class="ident">nays</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">nays</span>.<span class="ident">saturating_add</span>(<span class="ident">delegations</span>.<span class="ident">votes</span>),
 		}
 	}
 
 	<span class="doccomment">/// Decrement some amount of votes.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reduce</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">approve</span>: <span class="ident">bool</span>, <span class="ident">delegations</span>: <span class="ident">Delegations</span><span class="op">&lt;</span><span class="ident">Votes</span><span class="op">&gt;</span>) {
-		<span class="self">self</span>.<span class="ident">turnout</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">turnout</span>.<span class="ident">saturating_sub</span>(<span class="ident">delegations</span>.<span class="ident">capital</span>);
 		<span class="kw">match</span> <span class="ident">approve</span> {
-			<span class="bool-val">true</span> =&gt; <span class="self">self</span>.<span class="ident">ayes</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ayes</span>.<span class="ident">saturating_sub</span>(<span class="ident">delegations</span>.<span class="ident">votes</span>),
+			<span class="bool-val">true</span> =&gt; {
+				<span class="self">self</span>.<span class="ident">support</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">support</span>.<span class="ident">saturating_sub</span>(<span class="ident">delegations</span>.<span class="ident">capital</span>);
+				<span class="self">self</span>.<span class="ident">ayes</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ayes</span>.<span class="ident">saturating_sub</span>(<span class="ident">delegations</span>.<span class="ident">votes</span>);
+			},
 			<span class="bool-val">false</span> =&gt; <span class="self">self</span>.<span class="ident">nays</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">nays</span>.<span class="ident">saturating_sub</span>(<span class="ident">delegations</span>.<span class="ident">votes</span>),
 		}
 	}
@@ -438,7 +448,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Delegations</span><span class="op">&lt;</span><span class="ident">Balance</span><span class="op">&gt;</span> {
 	<span class="doccomment">/// The number of votes (this is post-conviction).</span>
 	<span class="kw">pub</span> <span class="ident">votes</span>: <span class="ident">Balance</span>,
-	<span class="doccomment">/// The amount of raw capital, used for the turnout.</span>
+	<span class="doccomment">/// The amount of raw capital, used for the support.</span>
 	<span class="kw">pub</span> <span class="ident">capital</span>: <span class="ident">Balance</span>,
 }
 

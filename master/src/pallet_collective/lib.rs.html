@@ -2078,11 +2078,11 @@
 	}
 
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
-	<span class="kw">fn</span> <span class="ident">successful_origin</span>() -&gt; <span class="ident">O</span> {
+	<span class="kw">fn</span> <span class="ident">try_successful_origin</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">O</span>, ()<span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">zero_account_id</span> <span class="op">=</span>
 			<span class="ident">AccountId::decode</span>(<span class="kw-2">&amp;mut</span> <span class="ident">sp_runtime::traits::TrailingZeroInput::zeroes</span>())
 				.<span class="ident">expect</span>(<span class="string">&quot;infinite length input; no invalid inputs for type; qed&quot;</span>);
-		<span class="ident">O::from</span>(<span class="ident">RawOrigin::Member</span>(<span class="ident">zero_account_id</span>))
+		<span class="prelude-val">Ok</span>(<span class="ident">O::from</span>(<span class="ident">RawOrigin::Member</span>(<span class="ident">zero_account_id</span>)))
 	}
 }
 
@@ -2103,8 +2103,8 @@
 	}
 
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
-	<span class="kw">fn</span> <span class="ident">successful_origin</span>() -&gt; <span class="ident">O</span> {
-		<span class="ident">O::from</span>(<span class="ident">RawOrigin::Members</span>(<span class="ident">N</span>, <span class="ident">N</span>))
+	<span class="kw">fn</span> <span class="ident">try_successful_origin</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">O</span>, ()<span class="op">&gt;</span> {
+		<span class="prelude-val">Ok</span>(<span class="ident">O::from</span>(<span class="ident">RawOrigin::Members</span>(<span class="ident">N</span>, <span class="ident">N</span>)))
 	}
 }
 
@@ -2128,8 +2128,8 @@
 	}
 
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
-	<span class="kw">fn</span> <span class="ident">successful_origin</span>() -&gt; <span class="ident">O</span> {
-		<span class="ident">O::from</span>(<span class="ident">RawOrigin::Members</span>(<span class="number">1u32</span>, <span class="number">0u32</span>))
+	<span class="kw">fn</span> <span class="ident">try_successful_origin</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">O</span>, ()<span class="op">&gt;</span> {
+		<span class="prelude-val">Ok</span>(<span class="ident">O::from</span>(<span class="ident">RawOrigin::Members</span>(<span class="number">1u32</span>, <span class="number">0u32</span>)))
 	}
 }
 
@@ -2153,8 +2153,8 @@
 	}
 
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
-	<span class="kw">fn</span> <span class="ident">successful_origin</span>() -&gt; <span class="ident">O</span> {
-		<span class="ident">O::from</span>(<span class="ident">RawOrigin::Members</span>(<span class="number">0u32</span>, <span class="number">0u32</span>))
+	<span class="kw">fn</span> <span class="ident">try_successful_origin</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">O</span>, ()<span class="op">&gt;</span> {
+		<span class="prelude-val">Ok</span>(<span class="ident">O::from</span>(<span class="ident">RawOrigin::Members</span>(<span class="number">0u32</span>, <span class="number">0u32</span>)))
 	}
 }
 </code></pre></div>

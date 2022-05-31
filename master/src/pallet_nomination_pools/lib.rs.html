@@ -2357,13 +2357,6 @@
 <span id="2352">2352</span>
 <span id="2353">2353</span>
 <span id="2354">2354</span>
-<span id="2355">2355</span>
-<span id="2356">2356</span>
-<span id="2357">2357</span>
-<span id="2358">2358</span>
-<span id="2359">2359</span>
-<span id="2360">2360</span>
-<span id="2361">2361</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2020-2022 Parity Technologies (UK) Ltd.</span>
@@ -3448,7 +3441,7 @@
 <span class="attribute">#[<span class="ident">frame_support::pallet</span>]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">pallet</span> {
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">frame_support</span>::{<span class="ident">traits::StorageVersion</span>, <span class="ident">transactional</span>};
+	<span class="kw">use</span> <span class="ident">frame_support::traits::StorageVersion</span>;
 	<span class="kw">use</span> <span class="ident">frame_system</span>::{<span class="ident">ensure_signed</span>, <span class="ident">pallet_prelude</span>::<span class="kw-2">*</span>};
 
 	<span class="doccomment">/// The current storage version.</span>
@@ -3715,7 +3708,6 @@
 		<span class="doccomment">///   `existential deposit + amount` in their account.</span>
 		<span class="doccomment">/// * Only a pool with [`PoolState::Open`] can be joined</span>
 		<span class="attribute">#[<span class="ident">pallet::weight</span>(<span class="ident">T::WeightInfo::join</span>())]</span>
-		<span class="attribute">#[<span class="ident">transactional</span>]</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">join</span>(
 			<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
 			<span class="attribute">#[<span class="ident">pallet::compact</span>]</span> <span class="ident">amount</span>: <span class="ident">BalanceOf</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
@@ -3776,7 +3768,6 @@
 			<span class="ident">T::WeightInfo::bond_extra_transfer</span>()
 			.<span class="ident">max</span>(<span class="ident">T::WeightInfo::bond_extra_reward</span>())
 		)]</span>
-		<span class="attribute">#[<span class="ident">transactional</span>]</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bond_extra</span>(<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">extra</span>: <span class="ident">BondExtra</span><span class="op">&lt;</span><span class="ident">BalanceOf</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="ident">DispatchResult</span> {
 			<span class="kw">let</span> <span class="ident">who</span> <span class="op">=</span> <span class="ident">ensure_signed</span>(<span class="ident">origin</span>)<span class="question-mark">?</span>;
 			<span class="kw">let</span> (<span class="kw-2">mut</span> <span class="ident">member</span>, <span class="kw-2">mut</span> <span class="ident">bonded_pool</span>, <span class="kw-2">mut</span> <span class="ident">reward_pool</span>) <span class="op">=</span> <span class="ident"><span class="self">Self</span>::get_member_with_pools</span>(<span class="kw-2">&amp;</span><span class="ident">who</span>)<span class="question-mark">?</span>;
@@ -3815,7 +3806,6 @@
 		<span class="doccomment">/// The member will earn rewards pro rata based on the members stake vs the sum of the</span>
 		<span class="doccomment">/// members in the pools stake. Rewards do not &quot;expire&quot;.</span>
 		<span class="attribute">#[<span class="ident">pallet::weight</span>(<span class="ident">T::WeightInfo::claim_payout</span>())]</span>
-		<span class="attribute">#[<span class="ident">transactional</span>]</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">claim_payout</span>(<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="ident">DispatchResult</span> {
 			<span class="kw">let</span> <span class="ident">who</span> <span class="op">=</span> <span class="ident">ensure_signed</span>(<span class="ident">origin</span>)<span class="question-mark">?</span>;
 			<span class="kw">let</span> (<span class="kw-2">mut</span> <span class="ident">member</span>, <span class="kw-2">mut</span> <span class="ident">bonded_pool</span>, <span class="kw-2">mut</span> <span class="ident">reward_pool</span>) <span class="op">=</span> <span class="ident"><span class="self">Self</span>::get_member_with_pools</span>(<span class="kw-2">&amp;</span><span class="ident">who</span>)<span class="question-mark">?</span>;
@@ -3855,7 +3845,6 @@
 		<span class="doccomment">/// there are too many unlocking chunks, the result of this call will likely be the</span>
 		<span class="doccomment">/// `NoMoreChunks` error from the staking system.</span>
 		<span class="attribute">#[<span class="ident">pallet::weight</span>(<span class="ident">T::WeightInfo::unbond</span>())]</span>
-		<span class="attribute">#[<span class="ident">transactional</span>]</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unbond</span>(
 			<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
 			<span class="ident">member_account</span>: <span class="ident">T::AccountId</span>,
@@ -3930,7 +3919,6 @@
 		<span class="doccomment">/// would probably see an error like `NoMoreChunks` emitted from the staking system when</span>
 		<span class="doccomment">/// they attempt to unbond.</span>
 		<span class="attribute">#[<span class="ident">pallet::weight</span>(<span class="ident">T::WeightInfo::pool_withdraw_unbonded</span>(<span class="kw-2">*</span><span class="ident">num_slashing_spans</span>))]</span>
-		<span class="attribute">#[<span class="ident">transactional</span>]</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pool_withdraw_unbonded</span>(
 			<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
 			<span class="ident">pool_id</span>: <span class="ident">PoolId</span>,
@@ -3967,7 +3955,6 @@
 		<span class="attribute">#[<span class="ident">pallet::weight</span>(
 			<span class="ident">T::WeightInfo::withdraw_unbonded_kill</span>(<span class="kw-2">*</span><span class="ident">num_slashing_spans</span>)
 		)]</span>
-		<span class="attribute">#[<span class="ident">transactional</span>]</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">withdraw_unbonded</span>(
 			<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
 			<span class="ident">member_account</span>: <span class="ident">T::AccountId</span>,
@@ -4083,7 +4070,6 @@
 		<span class="doccomment">/// In addition to `amount`, the caller will transfer the existential deposit; so the caller</span>
 		<span class="doccomment">/// needs at have at least `amount + existential_deposit` transferrable.</span>
 		<span class="attribute">#[<span class="ident">pallet::weight</span>(<span class="ident">T::WeightInfo::create</span>())]</span>
-		<span class="attribute">#[<span class="ident">transactional</span>]</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create</span>(
 			<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
 			<span class="attribute">#[<span class="ident">pallet::compact</span>]</span> <span class="ident">amount</span>: <span class="ident">BalanceOf</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,

@@ -3103,9 +3103,9 @@
 	}
 
 	<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;runtime-benchmarks&quot;</span>)]</span>
-	<span class="kw">fn</span> <span class="ident">successful_origin</span>() -&gt; <span class="ident">T::Origin</span> {
-		<span class="kw">let</span> <span class="ident">founder</span> <span class="op">=</span> <span class="ident">Founder</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::get</span>().<span class="ident">expect</span>(<span class="string">&quot;society founder should exist&quot;</span>);
-		<span class="ident">T::Origin::from</span>(<span class="ident">frame_system::RawOrigin::Signed</span>(<span class="ident">founder</span>))
+	<span class="kw">fn</span> <span class="ident">try_successful_origin</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T::Origin</span>, ()<span class="op">&gt;</span> {
+		<span class="kw">let</span> <span class="ident">founder</span> <span class="op">=</span> <span class="ident">Founder</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::get</span>().<span class="ident">ok_or</span>(())<span class="question-mark">?</span>;
+		<span class="prelude-val">Ok</span>(<span class="ident">T::Origin::from</span>(<span class="ident">frame_system::RawOrigin::Signed</span>(<span class="ident">founder</span>)))
 	}
 }
 

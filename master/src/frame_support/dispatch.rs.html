@@ -2881,6 +2881,7 @@
 <span id="2876">2876</span>
 <span id="2877">2877</span>
 <span id="2878">2878</span>
+<span id="2879">2879</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2017-2022 Parity Technologies (UK) Ltd.</span>
@@ -3083,6 +3084,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Transactional function discards all changes to storage if it returns `Err`, or commits if</span>
 <span class="doccomment">/// `Ok`, via the #\[transactional\] attribute. Note the attribute must be after #\[weight\].</span>
+<span class="doccomment">/// The #\[transactional\] attribute is deprecated since it is the default behaviour.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// # #[macro_use]</span>

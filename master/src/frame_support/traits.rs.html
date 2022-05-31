@@ -107,6 +107,8 @@
 <span id="102">102</span>
 <span id="103">103</span>
 <span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2019-2022 Parity Technologies (UK) Ltd.</span>
@@ -168,7 +170,7 @@
 	<span class="ident">ConstU32</span>, <span class="ident">ConstU64</span>, <span class="ident">ConstU8</span>, <span class="ident">DefensiveSaturating</span>, <span class="ident">EnsureInherentsAreFirst</span>, <span class="ident">EqualPrivilegeOnly</span>,
 	<span class="ident">EstimateCallFee</span>, <span class="ident">ExecuteBlock</span>, <span class="ident">ExtrinsicCall</span>, <span class="ident">Get</span>, <span class="ident">GetBacking</span>, <span class="ident">GetDefault</span>, <span class="ident">HandleLifetime</span>,
 	<span class="ident">IsSubType</span>, <span class="ident">IsType</span>, <span class="ident">Len</span>, <span class="ident">OffchainWorker</span>, <span class="ident">OnKilledAccount</span>, <span class="ident">OnNewAccount</span>, <span class="ident">PreimageProvider</span>,
-	<span class="ident">PreimageRecipient</span>, <span class="ident">PrivilegeCmp</span>, <span class="ident">SameOrOther</span>, <span class="ident">Time</span>, <span class="ident">TryCollect</span>, <span class="ident">TryDrop</span>, <span class="ident">UnixTime</span>,
+	<span class="ident">PreimageRecipient</span>, <span class="ident">PrivilegeCmp</span>, <span class="ident">SameOrOther</span>, <span class="ident">Time</span>, <span class="ident">TryCollect</span>, <span class="ident">TryDrop</span>, <span class="ident">TypedGet</span>, <span class="ident">UnixTime</span>,
 	<span class="ident">WrapperKeepOpaque</span>, <span class="ident">WrapperOpaque</span>,
 };
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
@@ -202,9 +204,11 @@
 };
 
 <span class="kw">mod</span> <span class="ident">dispatch</span>;
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">dispatch::EnsureOneOf</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">dispatch</span>::{
-	<span class="ident">AsEnsureOriginWithArg</span>, <span class="ident">DispatchableWithStorageLayer</span>, <span class="ident">EnsureOneOf</span>, <span class="ident">EnsureOrigin</span>,
-	<span class="ident">EnsureOriginWithArg</span>, <span class="ident">OriginTrait</span>, <span class="ident">UnfilteredDispatchable</span>,
+	<span class="ident">AsEnsureOriginWithArg</span>, <span class="ident">DispatchableWithStorageLayer</span>, <span class="ident">EitherOf</span>, <span class="ident">EitherOfDiverse</span>, <span class="ident">EnsureOrigin</span>,
+	<span class="ident">EnsureOriginWithArg</span>, <span class="ident">NeverEnsureOrigin</span>, <span class="ident">OriginTrait</span>, <span class="ident">UnfilteredDispatchable</span>,
 };
 
 <span class="kw">mod</span> <span class="ident">voting</span>;

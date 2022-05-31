@@ -520,6 +520,7 @@
 <span id="515">515</span>
 <span id="516">516</span>
 <span id="517">517</span>
+<span id="518">518</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2020-2021 Parity Technologies (UK) Ltd.</span>
@@ -623,27 +624,27 @@
 }
 
 <span class="kw">fn</span> <span class="ident">make_passing_after</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span>(<span class="ident">index</span>: <span class="ident">ReferendumIndex</span>, <span class="ident">period_portion</span>: <span class="ident">Perbill</span>) {
-	<span class="kw">let</span> <span class="ident">turnout</span> <span class="op">=</span> <span class="ident">info</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">index</span>).<span class="ident">min_turnout</span>.<span class="ident">threshold</span>(<span class="ident">period_portion</span>);
+	<span class="kw">let</span> <span class="ident">support</span> <span class="op">=</span> <span class="ident">info</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">index</span>).<span class="ident">min_support</span>.<span class="ident">threshold</span>(<span class="ident">period_portion</span>);
 	<span class="kw">let</span> <span class="ident">approval</span> <span class="op">=</span> <span class="ident">info</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">index</span>).<span class="ident">min_approval</span>.<span class="ident">threshold</span>(<span class="ident">period_portion</span>);
 	<span class="ident">Referenda</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::access_poll</span>(<span class="ident">index</span>, <span class="op">|</span><span class="ident">status</span><span class="op">|</span> {
-		<span class="kw">if</span> <span class="kw">let</span> <span class="ident">PollStatus::Ongoing</span>(<span class="ident">tally</span>, ..) <span class="op">=</span> <span class="ident">status</span> {
-			<span class="kw-2">*</span><span class="ident">tally</span> <span class="op">=</span> <span class="ident">T::Tally::from_requirements</span>(<span class="ident">turnout</span>, <span class="ident">approval</span>);
+		<span class="kw">if</span> <span class="kw">let</span> <span class="ident">PollStatus::Ongoing</span>(<span class="ident">tally</span>, <span class="ident">class</span>) <span class="op">=</span> <span class="ident">status</span> {
+			<span class="kw-2">*</span><span class="ident">tally</span> <span class="op">=</span> <span class="ident">T::Tally::from_requirements</span>(<span class="ident">support</span>, <span class="ident">approval</span>, <span class="ident">class</span>);
 		}
 	});
 }
 
 <span class="kw">fn</span> <span class="ident">make_passing</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span>(<span class="ident">index</span>: <span class="ident">ReferendumIndex</span>) {
 	<span class="ident">Referenda</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::access_poll</span>(<span class="ident">index</span>, <span class="op">|</span><span class="ident">status</span><span class="op">|</span> {
-		<span class="kw">if</span> <span class="kw">let</span> <span class="ident">PollStatus::Ongoing</span>(<span class="ident">tally</span>, ..) <span class="op">=</span> <span class="ident">status</span> {
-			<span class="kw-2">*</span><span class="ident">tally</span> <span class="op">=</span> <span class="ident">T::Tally::unanimity</span>();
+		<span class="kw">if</span> <span class="kw">let</span> <span class="ident">PollStatus::Ongoing</span>(<span class="ident">tally</span>, <span class="ident">class</span>) <span class="op">=</span> <span class="ident">status</span> {
+			<span class="kw-2">*</span><span class="ident">tally</span> <span class="op">=</span> <span class="ident">T::Tally::unanimity</span>(<span class="ident">class</span>);
 		}
 	});
 }
 
 <span class="kw">fn</span> <span class="ident">make_failing</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span>(<span class="ident">index</span>: <span class="ident">ReferendumIndex</span>) {
 	<span class="ident">Referenda</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::access_poll</span>(<span class="ident">index</span>, <span class="op">|</span><span class="ident">status</span><span class="op">|</span> {
-		<span class="kw">if</span> <span class="kw">let</span> <span class="ident">PollStatus::Ongoing</span>(<span class="ident">tally</span>, ..) <span class="op">=</span> <span class="ident">status</span> {
-			<span class="kw-2">*</span><span class="ident">tally</span> <span class="op">=</span> <span class="ident">T::Tally::default</span>();
+		<span class="kw">if</span> <span class="kw">let</span> <span class="ident">PollStatus::Ongoing</span>(<span class="ident">tally</span>, <span class="ident">class</span>) <span class="op">=</span> <span class="ident">status</span> {
+			<span class="kw-2">*</span><span class="ident">tally</span> <span class="op">=</span> <span class="ident">T::Tally::rejection</span>(<span class="ident">class</span>);
 		}
 	});
 }
@@ -1023,6 +1024,7 @@
 		<span class="kw">let</span> (<span class="ident">_caller</span>, <span class="ident">index</span>) <span class="op">=</span> <span class="ident">create_referendum</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>();
 		<span class="ident">place_deposit</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">index</span>);
 		<span class="ident">skip_prepare_period</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">index</span>);
+		<span class="ident">make_failing</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">index</span>);
 		<span class="ident">nudge</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">index</span>);
 		<span class="ident">skip_decision_period</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">index</span>);
 	}: <span class="ident">nudge_referendum</span>(<span class="ident">RawOrigin::Root</span>, <span class="ident">index</span>)

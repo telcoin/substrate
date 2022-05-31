@@ -298,6 +298,12 @@
 <span id="293">293</span>
 <span id="294">294</span>
 <span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2022 Parity Technologies (UK) Ltd.</span>
@@ -401,9 +407,10 @@
 <span class="doccomment">/// error.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Commits happen to the parent transaction.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_transaction</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>() -&gt; <span class="ident">TransactionOutcome</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_transaction</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>
 <span class="kw">where</span>
 	<span class="ident">E</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">DispatchError</span><span class="op">&gt;</span>,
+	<span class="ident">F</span>: <span class="ident">FnOnce</span>() -&gt; <span class="ident">TransactionOutcome</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 {
 	<span class="comment">// This needs to happen before `start_transaction` below.</span>
 	<span class="comment">// Otherwise we may rollback the increase, then decrease as the guard goes out of scope</span>
@@ -429,7 +436,10 @@
 <span class="doccomment">/// This is mostly for backwards compatibility before there was a transactional layer limit.</span>
 <span class="doccomment">/// It is recommended to only use [`with_transaction`] to avoid users from generating too many</span>
 <span class="doccomment">/// transactional layers.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_transaction_unchecked</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>() -&gt; <span class="ident">TransactionOutcome</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>) -&gt; <span class="ident">R</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_transaction_unchecked</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="ident">R</span>
+<span class="kw">where</span>
+	<span class="ident">F</span>: <span class="ident">FnOnce</span>() -&gt; <span class="ident">TransactionOutcome</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>,
+{
 	<span class="comment">// This needs to happen before `start_transaction` below.</span>
 	<span class="comment">// Otherwise we may rollback the increase, then decrease as the guard goes out of scope</span>
 	<span class="comment">// and then end in some bad state.</span>
@@ -463,9 +473,10 @@
 <span class="doccomment">/// This is the same as `with_transaction`, but assuming that any function returning</span>
 <span class="doccomment">/// an `Err` should rollback, and any function returning `Ok` should commit. This</span>
 <span class="doccomment">/// provides a cleaner API to the developer who wants this behavior.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_storage_layer</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_storage_layer</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>
 <span class="kw">where</span>
 	<span class="ident">E</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">DispatchError</span><span class="op">&gt;</span>,
+	<span class="ident">F</span>: <span class="ident">FnOnce</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
 {
 	<span class="ident">with_transaction</span>(<span class="op">|</span><span class="op">|</span> {
 		<span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">f</span>();
@@ -481,9 +492,10 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// If we are already in a storage layer, we just execute the provided closure.</span>
 <span class="doccomment">/// If we are not, we execute the closure within a [`with_storage_layer`].</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">in_storage_layer</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">in_storage_layer</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>
 <span class="kw">where</span>
 	<span class="ident">E</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">DispatchError</span><span class="op">&gt;</span>,
+	<span class="ident">F</span>: <span class="ident">FnOnce</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
 {
 	<span class="kw">if</span> <span class="ident">is_transactional</span>() {
 		<span class="ident">f</span>()
