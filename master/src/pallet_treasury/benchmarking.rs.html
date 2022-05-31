@@ -131,6 +131,14 @@
 <span id="126">126</span>
 <span id="127">127</span>
 <span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2020-2022 Parity Technologies (UK) Ltd.</span>
@@ -199,14 +207,22 @@
 }
 
 <span class="macro">benchmarks_instance_pallet!</span> {
+	<span class="comment">// This benchmark is short-circuited if `SpendOrigin` cannot provide</span>
+	<span class="comment">// a successful origin, in which case `spend` is un-callable and can use weight=0.</span>
 	<span class="ident">spend</span> {
 		<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">value</span>, <span class="ident">beneficiary_lookup</span>) <span class="op">=</span> <span class="ident">setup_proposal</span>::<span class="op">&lt;</span><span class="ident">T</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">SEED</span>);
-		<span class="kw">let</span> <span class="ident">origin</span> <span class="op">=</span> <span class="ident">T::SpendOrigin::successful_origin</span>();
+		<span class="kw">let</span> <span class="ident">origin</span> <span class="op">=</span> <span class="ident">T::SpendOrigin::try_successful_origin</span>();
 		<span class="kw">let</span> <span class="ident">beneficiary</span> <span class="op">=</span> <span class="ident">T::Lookup::lookup</span>(<span class="ident">beneficiary_lookup</span>.<span class="ident">clone</span>()).<span class="ident">unwrap</span>();
 		<span class="kw">let</span> <span class="ident">call</span> <span class="op">=</span> <span class="ident">Call</span>::<span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">I</span><span class="op">&gt;</span><span class="ident">::spend</span> { <span class="ident">amount</span>: <span class="ident">value</span>, <span class="ident">beneficiary</span>: <span class="ident">beneficiary_lookup</span> };
-	}: { <span class="ident">call</span>.<span class="ident">dispatch_bypass_filter</span>(<span class="ident">origin</span>)<span class="question-mark">?</span> }
+	}: {
+		<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">origin</span>) <span class="op">=</span> <span class="ident">origin</span>.<span class="ident">clone</span>() {
+			<span class="ident">call</span>.<span class="ident">dispatch_bypass_filter</span>(<span class="ident">origin</span>)<span class="question-mark">?</span>;
+		}
+	}
 	<span class="ident">verify</span> {
-		<span class="ident">assert_last_event</span>::<span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">Event::SpendApproved</span> { <span class="ident">proposal_index</span>: <span class="number">0</span>, <span class="ident">amount</span>: <span class="ident">value</span>, <span class="ident">beneficiary</span> }.<span class="ident">into</span>())
+		<span class="kw">if</span> <span class="ident">origin</span>.<span class="ident">is_ok</span>() {
+			<span class="ident">assert_last_event</span>::<span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">Event::SpendApproved</span> { <span class="ident">proposal_index</span>: <span class="number">0</span>, <span class="ident">amount</span>: <span class="ident">value</span>, <span class="ident">beneficiary</span> }.<span class="ident">into</span>())
+		}
 	}
 
 	<span class="ident">propose_spend</span> {
