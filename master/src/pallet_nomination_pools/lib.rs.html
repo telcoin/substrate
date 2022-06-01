@@ -2675,7 +2675,7 @@
 		<span class="ident">Currency</span>, <span class="ident">Defensive</span>, <span class="ident">DefensiveOption</span>, <span class="ident">DefensiveResult</span>, <span class="ident">DefensiveSaturating</span>,
 		<span class="ident">ExistenceRequirement</span>, <span class="ident">Get</span>,
 	},
-	<span class="ident">CloneNoBound</span>, <span class="ident">DefaultNoBound</span>, <span class="ident">PartialEqNoBound</span>, <span class="ident">RuntimeDebugNoBound</span>,
+	<span class="ident">CloneNoBound</span>, <span class="ident">DefaultNoBound</span>, <span class="ident">RuntimeDebugNoBound</span>,
 };
 <span class="kw">use</span> <span class="ident">scale_info::TypeInfo</span>;
 <span class="kw">use</span> <span class="ident">sp_core::U256</span>;
@@ -2757,7 +2757,7 @@
 
 <span class="doccomment">/// A member in a pool.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Encode</span>, <span class="ident">Decode</span>, <span class="ident">MaxEncodedLen</span>, <span class="ident">TypeInfo</span>, <span class="ident">RuntimeDebugNoBound</span>, <span class="ident">CloneNoBound</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>, <span class="ident">derive</span>(<span class="ident">PartialEqNoBound</span>, <span class="ident">DefaultNoBound</span>))]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>, <span class="ident">derive</span>(<span class="ident">frame_support::PartialEqNoBound</span>, <span class="ident">DefaultNoBound</span>))]</span>
 <span class="attribute">#[<span class="ident">codec</span>(<span class="ident">mel_bound</span>(<span class="ident">T</span>: <span class="ident">Config</span>))]</span>
 <span class="attribute">#[<span class="ident">scale_info</span>(<span class="ident">skip_type_params</span>(<span class="ident">T</span>))]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PoolMember</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> {

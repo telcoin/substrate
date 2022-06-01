@@ -143,6 +143,8 @@
 <span id="138">138</span>
 <span id="139">139</span>
 <span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2020-2022 Parity Technologies (UK) Ltd.</span>
@@ -169,7 +171,7 @@
 <span class="kw">use</span> <span class="ident">alloc::string::ToString</span>;
 <span class="kw">use</span> <span class="ident">proc_macro2::TokenStream</span>;
 <span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">quote</span>, <span class="ident">quote_spanned</span>};
-<span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">parse_macro_input</span>, <span class="ident">spanned::Spanned</span>, <span class="ident">Data</span>, <span class="ident">DataStruct</span>, <span class="ident">DeriveInput</span>, <span class="ident">Fields</span>, <span class="ident">Ident</span>};
+<span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">parse_macro_input</span>, <span class="ident">Data</span>, <span class="ident">DeriveInput</span>, <span class="ident">Ident</span>};
 
 <span class="doccomment">/// This derives `Debug` for a struct where each field must be of some numeric type.</span>
 <span class="doccomment">/// It interprets each field as its represents some weight and formats it as times so that</span>
@@ -229,7 +231,9 @@
 
 <span class="doccomment">/// This is only used then the `full` feature is activated.</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;full&quot;</span>)]</span>
-<span class="kw">fn</span> <span class="ident">iterate_fields</span>(<span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="ident">DataStruct</span>, <span class="ident">fmt</span>: <span class="kw">impl</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">Ident</span>) -&gt; <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
+<span class="kw">fn</span> <span class="ident">iterate_fields</span>(<span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="ident">syn::DataStruct</span>, <span class="ident">fmt</span>: <span class="kw">impl</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">Ident</span>) -&gt; <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
+	<span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">spanned::Spanned</span>, <span class="ident">Fields</span>};
+
 	<span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">data</span>.<span class="ident">fields</span> {
 		<span class="ident">Fields::Named</span>(<span class="ident">fields</span>) =&gt; {
 			<span class="kw">let</span> <span class="ident">recurse</span> <span class="op">=</span> <span class="ident">fields</span>.<span class="ident">named</span>.<span class="ident">iter</span>().<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> {

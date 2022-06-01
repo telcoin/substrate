@@ -2882,6 +2882,9 @@
 <span id="2877">2877</span>
 <span id="2878">2878</span>
 <span id="2879">2879</span>
+<span id="2880">2880</span>
+<span id="2881">2881</span>
+<span id="2882">2882</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2017-2022 Parity Technologies (UK) Ltd.</span>
@@ -5630,6 +5633,9 @@
 			<span class="macro">unimplemented!</span>(<span class="string">&quot;Not required in tests!&quot;</span>)
 		}
 		<span class="kw">fn</span> <span class="ident">signed</span>(<span class="ident">_by</span>: <span class="op">&lt;</span><span class="ident">TraitImpl</span> <span class="kw">as</span> <span class="ident">system::Config</span><span class="op">&gt;</span><span class="ident">::AccountId</span>) -&gt; <span class="self">Self</span> {
+			<span class="macro">unimplemented!</span>(<span class="string">&quot;Not required in tests!&quot;</span>)
+		}
+		<span class="kw">fn</span> <span class="ident">as_signed</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::AccountId</span><span class="op">&gt;</span> {
 			<span class="macro">unimplemented!</span>(<span class="string">&quot;Not required in tests!&quot;</span>)
 		}
 	}

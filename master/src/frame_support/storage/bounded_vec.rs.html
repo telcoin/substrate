@@ -1007,6 +1007,12 @@
 <span id="1002">1002</span>
 <span id="1003">1003</span>
 <span id="1004">1004</span>
+<span id="1005">1005</span>
+<span id="1006">1006</span>
+<span id="1007">1007</span>
+<span id="1008">1008</span>
+<span id="1009">1009</span>
+<span id="1010">1010</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2017-2022 Parity Technologies (UK) Ltd.</span>
@@ -1293,6 +1299,12 @@
 	<span class="doccomment">/// Allocate self with the maximum possible capacity.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_max_capacity</span>() -&gt; <span class="self">Self</span> {
 		<span class="ident"><span class="self">Self</span>::with_bounded_capacity</span>(<span class="ident"><span class="self">Self</span>::bound</span>())
+	}
+
+	<span class="doccomment">/// Consume and truncate the vector `v` in order to create a new instance of `Self` from it.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">truncate_from</span>(<span class="kw-2">mut</span> <span class="ident">v</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+		<span class="ident">v</span>.<span class="ident">truncate</span>(<span class="ident"><span class="self">Self</span>::bound</span>());
+		<span class="ident"><span class="self">Self</span>::unchecked_from</span>(<span class="ident">v</span>)
 	}
 
 	<span class="doccomment">/// Get the bound of the type in `usize`.</span>

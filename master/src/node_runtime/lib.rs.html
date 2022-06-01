@@ -2068,6 +2068,39 @@
 <span id="2063">2063</span>
 <span id="2064">2064</span>
 <span id="2065">2065</span>
+<span id="2066">2066</span>
+<span id="2067">2067</span>
+<span id="2068">2068</span>
+<span id="2069">2069</span>
+<span id="2070">2070</span>
+<span id="2071">2071</span>
+<span id="2072">2072</span>
+<span id="2073">2073</span>
+<span id="2074">2074</span>
+<span id="2075">2075</span>
+<span id="2076">2076</span>
+<span id="2077">2077</span>
+<span id="2078">2078</span>
+<span id="2079">2079</span>
+<span id="2080">2080</span>
+<span id="2081">2081</span>
+<span id="2082">2082</span>
+<span id="2083">2083</span>
+<span id="2084">2084</span>
+<span id="2085">2085</span>
+<span id="2086">2086</span>
+<span id="2087">2087</span>
+<span id="2088">2088</span>
+<span id="2089">2089</span>
+<span id="2090">2090</span>
+<span id="2091">2091</span>
+<span id="2092">2092</span>
+<span id="2093">2093</span>
+<span id="2094">2094</span>
+<span id="2095">2095</span>
+<span id="2096">2096</span>
+<span id="2097">2097</span>
+<span id="2098">2098</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2018-2022 Parity Technologies (UK) Ltd.</span>
@@ -2090,7 +2123,7 @@
 
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>), <span class="ident">no_std</span>)]</span>
 <span class="comment">// `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.</span>
-<span class="attribute">#![<span class="ident">recursion_limit</span> <span class="op">=</span> <span class="string">&quot;256&quot;</span>]</span>
+<span class="attribute">#![<span class="ident">recursion_limit</span> <span class="op">=</span> <span class="string">&quot;512&quot;</span>]</span>
 
 <span class="kw">use</span> <span class="ident">codec</span>::{<span class="ident">Decode</span>, <span class="ident">Encode</span>, <span class="ident">MaxEncodedLen</span>};
 <span class="kw">use</span> <span class="ident">frame_election_provider_support</span>::{
@@ -2113,7 +2146,7 @@
 };
 <span class="kw">use</span> <span class="ident">frame_system</span>::{
 	<span class="ident">limits</span>::{<span class="ident">BlockLength</span>, <span class="ident">BlockWeights</span>},
-	<span class="ident">EnsureRoot</span>, <span class="ident">EnsureSigned</span>,
+	<span class="ident">EnsureRoot</span>, <span class="ident">EnsureRootWithSuccess</span>, <span class="ident">EnsureSigned</span>,
 };
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">node_primitives</span>::{<span class="ident">AccountId</span>, <span class="ident">Signature</span>};
 <span class="kw">use</span> <span class="ident">node_primitives</span>::{<span class="ident">AccountIndex</span>, <span class="ident">Balance</span>, <span class="ident">BlockNumber</span>, <span class="ident">Hash</span>, <span class="ident">Index</span>, <span class="ident">Moment</span>};
@@ -2850,11 +2883,11 @@
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TracksInfo</span>;
 <span class="kw">impl</span> <span class="ident">pallet_referenda::TracksInfo</span><span class="op">&lt;</span><span class="ident">Balance</span>, <span class="ident">BlockNumber</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">TracksInfo</span> {
-	<span class="kw">type</span> <span class="ident">Id</span> <span class="op">=</span> <span class="ident">u8</span>;
+	<span class="kw">type</span> <span class="ident">Id</span> <span class="op">=</span> <span class="ident">u16</span>;
 	<span class="kw">type</span> <span class="ident">Origin</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">Origin</span> <span class="kw">as</span> <span class="ident">frame_support::traits::OriginTrait</span><span class="op">&gt;</span><span class="ident">::PalletsOrigin</span>;
 	<span class="kw">fn</span> <span class="ident">tracks</span>() -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [(<span class="ident"><span class="self">Self</span>::Id</span>, <span class="ident">pallet_referenda::TrackInfo</span><span class="op">&lt;</span><span class="ident">Balance</span>, <span class="ident">BlockNumber</span><span class="op">&gt;</span>)] {
-		<span class="kw">static</span> <span class="ident">DATA</span>: [(<span class="ident">u8</span>, <span class="ident">pallet_referenda::TrackInfo</span><span class="op">&lt;</span><span class="ident">Balance</span>, <span class="ident">BlockNumber</span><span class="op">&gt;</span>); <span class="number">1</span>] <span class="op">=</span> [(
-			<span class="number">0u8</span>,
+		<span class="kw">static</span> <span class="ident">DATA</span>: [(<span class="ident">u16</span>, <span class="ident">pallet_referenda::TrackInfo</span><span class="op">&lt;</span><span class="ident">Balance</span>, <span class="ident">BlockNumber</span><span class="op">&gt;</span>); <span class="number">1</span>] <span class="op">=</span> [(
+			<span class="number">0u16</span>,
 			<span class="ident">pallet_referenda::TrackInfo</span> {
 				<span class="ident">name</span>: <span class="string">&quot;root&quot;</span>,
 				<span class="ident">max_deciding</span>: <span class="number">1</span>,
@@ -2895,6 +2928,7 @@
 	<span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
 	<span class="kw">type</span> <span class="ident">Scheduler</span> <span class="op">=</span> <span class="ident">Scheduler</span>;
 	<span class="kw">type</span> <span class="ident">Currency</span> <span class="op">=</span> <span class="ident">pallet_balances::Pallet</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
+	<span class="kw">type</span> <span class="ident">SubmitOrigin</span> <span class="op">=</span> <span class="ident">EnsureSigned</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span>;
 	<span class="kw">type</span> <span class="ident">CancelOrigin</span> <span class="op">=</span> <span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span>;
 	<span class="kw">type</span> <span class="ident">KillOrigin</span> <span class="op">=</span> <span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span>;
 	<span class="kw">type</span> <span class="ident">Slash</span> <span class="op">=</span> ();
@@ -2905,6 +2939,35 @@
 	<span class="kw">type</span> <span class="ident">UndecidingTimeout</span> <span class="op">=</span> <span class="ident">UndecidingTimeout</span>;
 	<span class="kw">type</span> <span class="ident">AlarmInterval</span> <span class="op">=</span> <span class="ident">AlarmInterval</span>;
 	<span class="kw">type</span> <span class="ident">Tracks</span> <span class="op">=</span> <span class="ident">TracksInfo</span>;
+}
+
+<span class="kw">impl</span> <span class="ident">pallet_referenda::Config</span><span class="op">&lt;</span><span class="ident">pallet_referenda::Instance2</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+	<span class="kw">type</span> <span class="ident">WeightInfo</span> <span class="op">=</span> <span class="ident">pallet_referenda::weights::SubstrateWeight</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
+	<span class="kw">type</span> <span class="ident">Call</span> <span class="op">=</span> <span class="ident">Call</span>;
+	<span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
+	<span class="kw">type</span> <span class="ident">Scheduler</span> <span class="op">=</span> <span class="ident">Scheduler</span>;
+	<span class="kw">type</span> <span class="ident">Currency</span> <span class="op">=</span> <span class="ident">pallet_balances::Pallet</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
+	<span class="kw">type</span> <span class="ident">SubmitOrigin</span> <span class="op">=</span> <span class="ident">EnsureSigned</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span>;
+	<span class="kw">type</span> <span class="ident">CancelOrigin</span> <span class="op">=</span> <span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span>;
+	<span class="kw">type</span> <span class="ident">KillOrigin</span> <span class="op">=</span> <span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span>;
+	<span class="kw">type</span> <span class="ident">Slash</span> <span class="op">=</span> ();
+	<span class="kw">type</span> <span class="ident">Votes</span> <span class="op">=</span> <span class="ident">pallet_ranked_collective::Votes</span>;
+	<span class="kw">type</span> <span class="ident">Tally</span> <span class="op">=</span> <span class="ident">pallet_ranked_collective::TallyOf</span><span class="op">&lt;</span><span class="ident">Runtime</span><span class="op">&gt;</span>;
+	<span class="kw">type</span> <span class="ident">SubmissionDeposit</span> <span class="op">=</span> <span class="ident">SubmissionDeposit</span>;
+	<span class="kw">type</span> <span class="ident">MaxQueued</span> <span class="op">=</span> <span class="ident">ConstU32</span><span class="op">&lt;</span><span class="number">100</span><span class="op">&gt;</span>;
+	<span class="kw">type</span> <span class="ident">UndecidingTimeout</span> <span class="op">=</span> <span class="ident">UndecidingTimeout</span>;
+	<span class="kw">type</span> <span class="ident">AlarmInterval</span> <span class="op">=</span> <span class="ident">AlarmInterval</span>;
+	<span class="kw">type</span> <span class="ident">Tracks</span> <span class="op">=</span> <span class="ident">TracksInfo</span>;
+}
+
+<span class="kw">impl</span> <span class="ident">pallet_ranked_collective::Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+	<span class="kw">type</span> <span class="ident">WeightInfo</span> <span class="op">=</span> <span class="ident">pallet_ranked_collective::weights::SubstrateWeight</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
+	<span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
+	<span class="kw">type</span> <span class="ident">PromoteOrigin</span> <span class="op">=</span> <span class="ident">EnsureRootWithSuccess</span><span class="op">&lt;</span><span class="ident">AccountId</span>, <span class="ident">ConstU16</span><span class="op">&lt;</span><span class="number">65535</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+	<span class="kw">type</span> <span class="ident">DemoteOrigin</span> <span class="op">=</span> <span class="ident">EnsureRootWithSuccess</span><span class="op">&lt;</span><span class="ident">AccountId</span>, <span class="ident">ConstU16</span><span class="op">&lt;</span><span class="number">65535</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+	<span class="kw">type</span> <span class="ident">Polls</span> <span class="op">=</span> <span class="ident">RankedPolls</span>;
+	<span class="kw">type</span> <span class="ident">MinRankOfClass</span> <span class="op">=</span> <span class="ident">traits::Identity</span>;
+	<span class="kw">type</span> <span class="ident">VoteWeight</span> <span class="op">=</span> <span class="ident">pallet_ranked_collective::Geometric</span>;
 }
 
 <span class="kw">impl</span> <span class="ident">pallet_remark::Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
@@ -3604,6 +3667,8 @@
 		<span class="ident">ConvictionVoting</span>: <span class="ident">pallet_conviction_voting</span>,
 		<span class="ident">Whitelist</span>: <span class="ident">pallet_whitelist</span>,
 		<span class="ident">NominationPools</span>: <span class="ident">pallet_nomination_pools</span>,
+		<span class="ident">RankedPolls</span>: <span class="ident">pallet_referenda</span>::<span class="op">&lt;</span><span class="ident">Instance2</span><span class="op">&gt;</span>,
+		<span class="ident">RankedCollective</span>: <span class="ident">pallet_ranked_collective</span>,
 	}
 );
 
@@ -3692,6 +3757,7 @@
 		[<span class="ident">pallet_offences</span>, <span class="ident">OffencesBench</span>::<span class="op">&lt;</span><span class="ident">Runtime</span><span class="op">&gt;</span>]
 		[<span class="ident">pallet_preimage</span>, <span class="ident">Preimage</span>]
 		[<span class="ident">pallet_proxy</span>, <span class="ident">Proxy</span>]
+		[<span class="ident">pallet_ranked_collective</span>, <span class="ident">RankedCollective</span>]
 		[<span class="ident">pallet_referenda</span>, <span class="ident">Referenda</span>]
 		[<span class="ident">pallet_recovery</span>, <span class="ident">Recovery</span>]
 		[<span class="ident">pallet_remark</span>, <span class="ident">Remark</span>]

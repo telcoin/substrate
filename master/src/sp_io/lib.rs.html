@@ -3533,17 +3533,17 @@
 		<span class="kw">fn</span> <span class="ident">new_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">attrs</span>: <span class="kw-2">&amp;</span><span class="ident">Attributes</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">Id</span> {
 			<span class="ident">Id::from_u64</span>(<span class="ident">wasm_tracing::enter_span</span>(<span class="ident">Crossing</span>(<span class="ident">attrs</span>.<span class="ident">into</span>())))
 		}
-		<span class="kw">fn</span> <span class="ident">enter</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">span</span>: <span class="kw-2">&amp;</span><span class="ident">Id</span>) {
+		<span class="kw">fn</span> <span class="ident">enter</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">Id</span>) {
 			<span class="comment">// Do nothing, we already entered the span previously</span>
 		}
 		<span class="doccomment">/// Not implemented! We do not support recording values later</span>
 		<span class="doccomment">/// Will panic when used.</span>
-		<span class="kw">fn</span> <span class="ident">record</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">span</span>: <span class="kw-2">&amp;</span><span class="ident">Id</span>, <span class="ident">values</span>: <span class="kw-2">&amp;</span><span class="ident">Record</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) {
+		<span class="kw">fn</span> <span class="ident">record</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">Id</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">Record</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) {
 			<span class="macro">unimplemented!</span> {} <span class="comment">// this usage is not supported</span>
 		}
 		<span class="doccomment">/// Not implemented! We do not support recording values later</span>
 		<span class="doccomment">/// Will panic when used.</span>
-		<span class="kw">fn</span> <span class="ident">record_follows_from</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">span</span>: <span class="kw-2">&amp;</span><span class="ident">Id</span>, <span class="ident">follows</span>: <span class="kw-2">&amp;</span><span class="ident">Id</span>) {
+		<span class="kw">fn</span> <span class="ident">record_follows_from</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">Id</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">Id</span>) {
 			<span class="macro">unimplemented!</span> {} <span class="comment">// this usage is not supported</span>
 		}
 		<span class="kw">fn</span> <span class="ident">event</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">event</span>: <span class="kw-2">&amp;</span><span class="ident">Event</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) {

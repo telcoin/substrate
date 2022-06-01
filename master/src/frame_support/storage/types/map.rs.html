@@ -659,6 +659,25 @@
 <span id="654">654</span>
 <span id="655">655</span>
 <span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
+<span id="672">672</span>
+<span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2017-2022 Parity Technologies (UK) Ltd.</span>
@@ -683,7 +702,7 @@
 	<span class="ident">metadata</span>::{<span class="ident">StorageEntryMetadata</span>, <span class="ident">StorageEntryType</span>},
 	<span class="ident">storage</span>::{
 		<span class="ident">types</span>::{<span class="ident">OptionQuery</span>, <span class="ident">QueryKindTrait</span>, <span class="ident">StorageEntryMetadataBuilder</span>},
-		<span class="ident">StorageAppend</span>, <span class="ident">StorageDecodeLength</span>, <span class="ident">StoragePrefixedMap</span>, <span class="ident">StorageTryAppend</span>,
+		<span class="ident">KeyLenOf</span>, <span class="ident">StorageAppend</span>, <span class="ident">StorageDecodeLength</span>, <span class="ident">StoragePrefixedMap</span>, <span class="ident">StorageTryAppend</span>,
 	},
 	<span class="ident">traits</span>::{<span class="ident">Get</span>, <span class="ident">GetDefault</span>, <span class="ident">StorageInfo</span>, <span class="ident">StorageInstance</span>},
 };
@@ -713,6 +732,20 @@
 	<span class="ident">OnEmpty</span> <span class="op">=</span> <span class="ident">GetDefault</span>,
 	<span class="ident">MaxValues</span> <span class="op">=</span> <span class="ident">GetDefault</span>,
 <span class="op">&gt;</span>(<span class="ident">core::marker::PhantomData</span><span class="op">&lt;</span>(<span class="ident">Prefix</span>, <span class="ident">Hasher</span>, <span class="ident">Key</span>, <span class="ident">Value</span>, <span class="ident">QueryKind</span>, <span class="ident">OnEmpty</span>, <span class="ident">MaxValues</span>)<span class="op">&gt;</span>);
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Prefix</span>, <span class="ident">Hasher</span>, <span class="ident">Key</span>, <span class="ident">Value</span>, <span class="ident">QueryKind</span>, <span class="ident">OnEmpty</span>, <span class="ident">MaxValues</span><span class="op">&gt;</span> <span class="ident">Get</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>
+	<span class="kw">for</span> <span class="ident">KeyLenOf</span><span class="op">&lt;</span><span class="ident">StorageMap</span><span class="op">&lt;</span><span class="ident">Prefix</span>, <span class="ident">Hasher</span>, <span class="ident">Key</span>, <span class="ident">Value</span>, <span class="ident">QueryKind</span>, <span class="ident">OnEmpty</span>, <span class="ident">MaxValues</span><span class="op">&gt;</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+	<span class="ident">Prefix</span>: <span class="ident">StorageInstance</span>,
+	<span class="ident">Hasher</span>: <span class="ident"><span class="kw">crate</span>::hash::StorageHasher</span>,
+	<span class="ident">Key</span>: <span class="ident">FullCodec</span> <span class="op">+</span> <span class="ident">MaxEncodedLen</span>,
+{
+	<span class="kw">fn</span> <span class="ident">get</span>() -&gt; <span class="ident">u32</span> {
+		<span class="kw">let</span> <span class="ident">z</span> <span class="op">=</span>
+			<span class="ident">Hasher::max_len</span>::<span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span>() <span class="op">+</span> <span class="ident">Prefix::pallet_prefix</span>().<span class="ident">len</span>() <span class="op">+</span> <span class="ident">Prefix::STORAGE_PREFIX</span>.<span class="ident">len</span>();
+		<span class="ident">z</span> <span class="kw">as</span> <span class="ident">u32</span>
+	}
+}
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Prefix</span>, <span class="ident">Hasher</span>, <span class="ident">Key</span>, <span class="ident">Value</span>, <span class="ident">QueryKind</span>, <span class="ident">OnEmpty</span>, <span class="ident">MaxValues</span><span class="op">&gt;</span>
 	<span class="ident"><span class="kw">crate</span>::storage::generator::StorageMap</span><span class="op">&lt;</span><span class="ident">Key</span>, <span class="ident">Value</span><span class="op">&gt;</span>
@@ -797,6 +830,11 @@
 	<span class="doccomment">/// Swap the values of two keys.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">swap</span><span class="op">&lt;</span><span class="ident">KeyArg1</span>: <span class="ident">EncodeLike</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span>, <span class="ident">KeyArg2</span>: <span class="ident">EncodeLike</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">key1</span>: <span class="ident">KeyArg1</span>, <span class="ident">key2</span>: <span class="ident">KeyArg2</span>) {
 		<span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident"><span class="kw">crate</span>::storage::StorageMap</span><span class="op">&lt;</span><span class="ident">Key</span>, <span class="ident">Value</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::swap</span>(<span class="ident">key1</span>, <span class="ident">key2</span>)
+	}
+
+	<span class="doccomment">/// Store or remove the value to be associated with `key` so that `get` returns the `query`.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span><span class="op">&lt;</span><span class="ident">KeyArg</span>: <span class="ident">EncodeLike</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">key</span>: <span class="ident">KeyArg</span>, <span class="ident">q</span>: <span class="ident">QueryKind::Query</span>) {
+		<span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident"><span class="kw">crate</span>::storage::StorageMap</span><span class="op">&lt;</span><span class="ident">Key</span>, <span class="ident">Value</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::set</span>(<span class="ident">key</span>, <span class="ident">q</span>)
 	}
 
 	<span class="doccomment">/// Store a value to be associated with the given key from the map.</span>

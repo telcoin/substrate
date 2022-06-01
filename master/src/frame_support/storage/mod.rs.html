@@ -1824,6 +1824,19 @@
 <span id="1819">1819</span>
 <span id="1820">1820</span>
 <span id="1821">1821</span>
+<span id="1822">1822</span>
+<span id="1823">1823</span>
+<span id="1824">1824</span>
+<span id="1825">1825</span>
+<span id="1826">1826</span>
+<span id="1827">1827</span>
+<span id="1828">1828</span>
+<span id="1829">1829</span>
+<span id="1830">1830</span>
+<span id="1831">1831</span>
+<span id="1832">1832</span>
+<span id="1833">1833</span>
+<span id="1834">1834</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2017-2022 Parity Technologies (UK) Ltd.</span>
@@ -1853,7 +1866,7 @@
 <span class="kw">use</span> <span class="ident">codec</span>::{<span class="ident">Decode</span>, <span class="ident">Encode</span>, <span class="ident">EncodeLike</span>, <span class="ident">FullCodec</span>, <span class="ident">FullEncode</span>};
 <span class="kw">use</span> <span class="ident">sp_core::storage::ChildInfo</span>;
 <span class="kw">use</span> <span class="ident">sp_runtime::generic</span>::{<span class="ident">Digest</span>, <span class="ident">DigestItem</span>};
-<span class="kw">use</span> <span class="ident">sp_std::prelude</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">sp_std</span>::{<span class="ident">marker::PhantomData</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>};
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{
 	<span class="ident">transactional</span>::{
@@ -1876,6 +1889,10 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">types</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">unhashed</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">weak_bounded_vec</span>;
+
+<span class="doccomment">/// Utility type for converting a storage map into a `Get&lt;u32&gt;` impl which returns the maximum</span>
+<span class="doccomment">/// key size.</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">KeyLenOf</span><span class="op">&lt;</span><span class="ident">M</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">M</span><span class="op">&gt;</span>);
 
 <span class="doccomment">/// A trait for working with macro-generated storage values under the substrate storage API.</span>
 <span class="doccomment">///</span>
@@ -1988,6 +2005,9 @@
 
 	<span class="doccomment">/// Load the value associated with the given key from the map.</span>
 	<span class="kw">fn</span> <span class="ident">get</span><span class="op">&lt;</span><span class="ident">KeyArg</span>: <span class="ident">EncodeLike</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">key</span>: <span class="ident">KeyArg</span>) -&gt; <span class="ident"><span class="self">Self</span>::Query</span>;
+
+	<span class="doccomment">/// Store or remove the value to be associated with `key` so that `get` returns the `query`.</span>
+	<span class="kw">fn</span> <span class="ident">set</span><span class="op">&lt;</span><span class="ident">KeyArg</span>: <span class="ident">EncodeLike</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">key</span>: <span class="ident">KeyArg</span>, <span class="ident">query</span>: <span class="ident"><span class="self">Self</span>::Query</span>);
 
 	<span class="doccomment">/// Try to get the value for the given key from the map.</span>
 	<span class="doccomment">///</span>
@@ -2303,6 +2323,9 @@
 		<span class="ident">KArg1</span>: <span class="ident">EncodeLike</span><span class="op">&lt;</span><span class="ident">K1</span><span class="op">&gt;</span>,
 		<span class="ident">KArg2</span>: <span class="ident">EncodeLike</span><span class="op">&lt;</span><span class="ident">K2</span><span class="op">&gt;</span>;
 
+	<span class="doccomment">/// Store or remove the value to be associated with `key` so that `get` returns the `query`.</span>
+	<span class="kw">fn</span> <span class="ident">set</span><span class="op">&lt;</span><span class="ident">KArg1</span>: <span class="ident">EncodeLike</span><span class="op">&lt;</span><span class="ident">K1</span><span class="op">&gt;</span>, <span class="ident">KArg2</span>: <span class="ident">EncodeLike</span><span class="op">&lt;</span><span class="ident">K2</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">k1</span>: <span class="ident">KArg1</span>, <span class="ident">k2</span>: <span class="ident">KArg2</span>, <span class="ident">query</span>: <span class="ident"><span class="self">Self</span>::Query</span>);
+
 	<span class="doccomment">/// Take a value from storage, removing it afterwards.</span>
 	<span class="kw">fn</span> <span class="ident">take</span><span class="op">&lt;</span><span class="ident">KArg1</span>, <span class="ident">KArg2</span><span class="op">&gt;</span>(<span class="ident">k1</span>: <span class="ident">KArg1</span>, <span class="ident">k2</span>: <span class="ident">KArg2</span>) -&gt; <span class="ident"><span class="self">Self</span>::Query</span>
 	<span class="kw">where</span>
@@ -2478,6 +2501,9 @@
 	<span class="doccomment">///</span>
 	<span class="doccomment">/// Returns `Ok` if it exists, `Err` if not.</span>
 	<span class="kw">fn</span> <span class="ident">try_get</span><span class="op">&lt;</span><span class="ident">KArg</span>: <span class="ident">EncodeLikeTuple</span><span class="op">&lt;</span><span class="ident">K::KArg</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">TupleToEncodedIter</span><span class="op">&gt;</span>(<span class="ident">key</span>: <span class="ident">KArg</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">V</span>, ()<span class="op">&gt;</span>;
+
+	<span class="doccomment">/// Store or remove the value to be associated with `key` so that `get` returns the `query`.</span>
+	<span class="kw">fn</span> <span class="ident">set</span><span class="op">&lt;</span><span class="ident">KArg</span>: <span class="ident">EncodeLikeTuple</span><span class="op">&lt;</span><span class="ident">K::KArg</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">TupleToEncodedIter</span><span class="op">&gt;</span>(<span class="ident">key</span>: <span class="ident">KArg</span>, <span class="ident">query</span>: <span class="ident"><span class="self">Self</span>::Query</span>);
 
 	<span class="doccomment">/// Swap the values of two keys.</span>
 	<span class="kw">fn</span> <span class="ident">swap</span><span class="op">&lt;</span><span class="ident">KOther</span>, <span class="ident">KArg1</span>, <span class="ident">KArg2</span><span class="op">&gt;</span>(<span class="ident">key1</span>: <span class="ident">KArg1</span>, <span class="ident">key2</span>: <span class="ident">KArg2</span>)

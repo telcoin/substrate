@@ -789,7 +789,7 @@
 <span class="doccomment">/// Information on the voting tracks.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">TracksInfo</span><span class="op">&lt;</span><span class="ident">Balance</span>, <span class="ident">Moment</span><span class="op">&gt;</span> {
 	<span class="doccomment">/// The identifier for a track.</span>
-	<span class="kw">type</span> <span class="ident">Id</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Parameter</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">PartialOrd</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>;
+	<span class="kw">type</span> <span class="ident">Id</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Parameter</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">PartialOrd</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">MaxEncodedLen</span>;
 
 	<span class="doccomment">/// The origin type from which a track is implied.</span>
 	<span class="kw">type</span> <span class="ident">Origin</span>;

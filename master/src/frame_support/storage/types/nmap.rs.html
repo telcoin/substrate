@@ -1278,6 +1278,14 @@
 <span id="1273">1273</span>
 <span id="1274">1274</span>
 <span id="1275">1275</span>
+<span id="1276">1276</span>
+<span id="1277">1277</span>
+<span id="1278">1278</span>
+<span id="1279">1279</span>
+<span id="1280">1280</span>
+<span id="1281">1281</span>
+<span id="1282">1282</span>
+<span id="1283">1283</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2021-2022 Parity Technologies (UK) Ltd.</span>
@@ -1420,6 +1428,14 @@
 		<span class="ident">key</span>: <span class="ident">KArg</span>,
 	) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Value</span>, ()<span class="op">&gt;</span> {
 		<span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident"><span class="kw">crate</span>::storage::StorageNMap</span><span class="op">&lt;</span><span class="ident">Key</span>, <span class="ident">Value</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::try_get</span>(<span class="ident">key</span>)
+	}
+
+	<span class="doccomment">/// Store or remove the value to be associated with `key` so that `get` returns the `query`.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span><span class="op">&lt;</span><span class="ident">KArg</span>: <span class="ident">EncodeLikeTuple</span><span class="op">&lt;</span><span class="ident">Key::KArg</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">TupleToEncodedIter</span><span class="op">&gt;</span>(
+		<span class="ident">key</span>: <span class="ident">KArg</span>,
+		<span class="ident">query</span>: <span class="ident">QueryKind::Query</span>,
+	) {
+		<span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident"><span class="kw">crate</span>::storage::StorageNMap</span><span class="op">&lt;</span><span class="ident">Key</span>, <span class="ident">Value</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::set</span>(<span class="ident">key</span>, <span class="ident">query</span>)
 	}
 
 	<span class="doccomment">/// Take a value from storage, removing it afterwards.</span>

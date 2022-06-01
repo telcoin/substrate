@@ -396,6 +396,7 @@ sourcesIndex["pallet_offences_benchmarking"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["pallet_preimage"] = {"name":"","files":["benchmarking.rs","lib.rs","weights.rs"]};
 sourcesIndex["pallet_proxy"] = {"name":"","files":["benchmarking.rs","lib.rs","weights.rs"]};
 sourcesIndex["pallet_randomness_collective_flip"] = {"name":"","files":["lib.rs"]};
+sourcesIndex["pallet_ranked_collective"] = {"name":"","files":["benchmarking.rs","lib.rs","weights.rs"]};
 sourcesIndex["pallet_recovery"] = {"name":"","files":["benchmarking.rs","lib.rs","weights.rs"]};
 sourcesIndex["pallet_referenda"] = {"name":"","files":["benchmarking.rs","branch.rs","lib.rs","types.rs","weights.rs"]};
 sourcesIndex["pallet_remark"] = {"name":"","files":["benchmarking.rs","lib.rs","weights.rs"]};

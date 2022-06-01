@@ -109,6 +109,7 @@
 <span id="104">104</span>
 <span id="105">105</span>
 <span id="106">106</span>
+<span id="107">107</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2019-2022 Parity Technologies (UK) Ltd.</span>
@@ -208,7 +209,8 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">dispatch::EnsureOneOf</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">dispatch</span>::{
 	<span class="ident">AsEnsureOriginWithArg</span>, <span class="ident">DispatchableWithStorageLayer</span>, <span class="ident">EitherOf</span>, <span class="ident">EitherOfDiverse</span>, <span class="ident">EnsureOrigin</span>,
-	<span class="ident">EnsureOriginWithArg</span>, <span class="ident">NeverEnsureOrigin</span>, <span class="ident">OriginTrait</span>, <span class="ident">UnfilteredDispatchable</span>,
+	<span class="ident">EnsureOriginWithArg</span>, <span class="ident">MapSuccess</span>, <span class="ident">NeverEnsureOrigin</span>, <span class="ident">OriginTrait</span>, <span class="ident">ReduceBy</span>, <span class="ident">TryMapSuccess</span>,
+	<span class="ident">UnfilteredDispatchable</span>,
 };
 
 <span class="kw">mod</span> <span class="ident">voting</span>;

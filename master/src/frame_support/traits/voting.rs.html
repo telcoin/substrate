@@ -193,7 +193,7 @@
 <span class="doccomment">//! votes.</span>
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::dispatch</span>::{<span class="ident">DispatchError</span>, <span class="ident">Parameter</span>};
-<span class="kw">use</span> <span class="ident">codec::HasCompact</span>;
+<span class="kw">use</span> <span class="ident">codec</span>::{<span class="ident">HasCompact</span>, <span class="ident">MaxEncodedLen</span>};
 <span class="kw">use</span> <span class="ident">sp_arithmetic</span>::{
 	<span class="ident">traits</span>::{<span class="ident">SaturatedConversion</span>, <span class="ident">UniqueSaturatedFrom</span>, <span class="ident">UniqueSaturatedInto</span>},
 	<span class="ident">Perbill</span>,
@@ -297,9 +297,9 @@
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Polling</span><span class="op">&lt;</span><span class="ident">Tally</span><span class="op">&gt;</span> {
-	<span class="kw">type</span> <span class="ident">Index</span>: <span class="ident">Parameter</span> <span class="op">+</span> <span class="ident">Member</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">PartialOrd</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">HasCompact</span>;
-	<span class="kw">type</span> <span class="ident">Votes</span>: <span class="ident">Parameter</span> <span class="op">+</span> <span class="ident">Member</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">PartialOrd</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">HasCompact</span>;
-	<span class="kw">type</span> <span class="ident">Class</span>: <span class="ident">Parameter</span> <span class="op">+</span> <span class="ident">Member</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">PartialOrd</span>;
+	<span class="kw">type</span> <span class="ident">Index</span>: <span class="ident">Parameter</span> <span class="op">+</span> <span class="ident">Member</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">PartialOrd</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">HasCompact</span> <span class="op">+</span> <span class="ident">MaxEncodedLen</span>;
+	<span class="kw">type</span> <span class="ident">Votes</span>: <span class="ident">Parameter</span> <span class="op">+</span> <span class="ident">Member</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">PartialOrd</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">HasCompact</span> <span class="op">+</span> <span class="ident">MaxEncodedLen</span>;
+	<span class="kw">type</span> <span class="ident">Class</span>: <span class="ident">Parameter</span> <span class="op">+</span> <span class="ident">Member</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">PartialOrd</span> <span class="op">+</span> <span class="ident">MaxEncodedLen</span>;
 	<span class="kw">type</span> <span class="ident">Moment</span>;
 
 	<span class="doccomment">/// Provides a vec of values that `T` may take.</span>

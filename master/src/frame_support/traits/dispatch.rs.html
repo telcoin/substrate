@@ -401,6 +401,9 @@
 <span id="396">396</span>
 <span id="397">397</span>
 <span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2019-2022 Parity Technologies (UK) Ltd.</span>
@@ -722,6 +725,9 @@
 
 	<span class="doccomment">/// Create with system signed origin and `frame_system::Config::BaseCallFilter`.</span>
 	<span class="kw">fn</span> <span class="ident">signed</span>(<span class="ident">by</span>: <span class="ident"><span class="self">Self</span>::AccountId</span>) -&gt; <span class="self">Self</span>;
+
+	<span class="doccomment">/// Extract the signer from the message if it is a `Signed` origin.</span>
+	<span class="kw">fn</span> <span class="ident">as_signed</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::AccountId</span><span class="op">&gt;</span>;
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>

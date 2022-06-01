@@ -1113,6 +1113,11 @@
 <span id="1108">1108</span>
 <span id="1109">1109</span>
 <span id="1110">1110</span>
+<span id="1111">1111</span>
+<span id="1112">1112</span>
+<span id="1113">1113</span>
+<span id="1114">1114</span>
+<span id="1115">1115</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2021-2022 Parity Technologies (UK) Ltd.</span>
@@ -1245,6 +1250,11 @@
 	<span class="doccomment">/// Returns `Ok` if it exists, `Err` if not.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_get</span><span class="op">&lt;</span><span class="ident">KeyArg</span>: <span class="ident">EncodeLike</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">key</span>: <span class="ident">KeyArg</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Value</span>, ()<span class="op">&gt;</span> {
 		<span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">MapWrapper</span><span class="op">&gt;</span><span class="ident">::Map::try_get</span>(<span class="ident">key</span>)
+	}
+
+	<span class="doccomment">/// Store or remove the value to be associated with `key` so that `get` returns the `query`.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span><span class="op">&lt;</span><span class="ident">KeyArg</span>: <span class="ident">EncodeLike</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">key</span>: <span class="ident">KeyArg</span>, <span class="ident">q</span>: <span class="ident">QueryKind::Query</span>) {
+		<span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">MapWrapper</span><span class="op">&gt;</span><span class="ident">::Map::set</span>(<span class="ident">key</span>, <span class="ident">q</span>)
 	}
 
 	<span class="doccomment">/// Swap the values of two keys.</span>
