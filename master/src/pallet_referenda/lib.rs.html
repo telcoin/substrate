@@ -1453,7 +1453,7 @@
 		<span class="attribute">#[<span class="ident">pallet::weight</span>(<span class="ident">T::WeightInfo::submit</span>())]</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">submit</span>(
 			<span class="ident">origin</span>: <span class="ident">OriginFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
-			<span class="ident">proposal_origin</span>: <span class="ident">PalletsOriginOf</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+			<span class="ident">proposal_origin</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">PalletsOriginOf</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 			<span class="ident">proposal_hash</span>: <span class="ident">T::Hash</span>,
 			<span class="ident">enactment_moment</span>: <span class="ident">DispatchTime</span><span class="op">&lt;</span><span class="ident">T::BlockNumber</span><span class="op">&gt;</span>,
 		) -&gt; <span class="ident">DispatchResult</span> {
@@ -1471,7 +1471,7 @@
 			<span class="kw">let</span> <span class="ident">nudge_call</span> <span class="op">=</span> <span class="ident">Call::nudge_referendum</span> { <span class="ident">index</span> };
 			<span class="kw">let</span> <span class="ident">status</span> <span class="op">=</span> <span class="ident">ReferendumStatus</span> {
 				<span class="ident">track</span>,
-				<span class="ident">origin</span>: <span class="ident">proposal_origin</span>,
+				<span class="ident">origin</span>: <span class="kw-2">*</span><span class="ident">proposal_origin</span>,
 				<span class="ident">proposal_hash</span>,
 				<span class="ident">enactment</span>: <span class="ident">enactment_moment</span>,
 				<span class="ident">submitted</span>: <span class="ident">now</span>,
