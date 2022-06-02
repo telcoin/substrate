@@ -823,6 +823,24 @@
 <span id="818">818</span>
 <span id="819">819</span>
 <span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
+<span id="823">823</span>
+<span id="824">824</span>
+<span id="825">825</span>
+<span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
+<span id="830">830</span>
+<span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2019-2022 Parity Technologies (UK) Ltd.</span>
@@ -875,6 +893,11 @@
 	<span class="doccomment">/// Returns the escaped path to the bloaty wasm binary.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_binary_bloaty_path_escaped</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
 		<span class="self">self</span>.<span class="number">0</span>.<span class="ident">display</span>().<span class="ident">to_string</span>().<span class="ident">escape_default</span>().<span class="ident">to_string</span>()
+	}
+
+	<span class="doccomment">/// Returns the path to the wasm binary.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wasm_binary_bloaty_path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Path</span> {
+		<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
 	}
 }
 
@@ -962,9 +985,17 @@
 		<span class="ident">copy_wasm_to_target_directory</span>(<span class="ident">project_cargo_toml</span>, <span class="ident">wasm_binary_compressed</span>)
 	});
 
-	<span class="ident">generate_rerun_if_changed_instructions</span>(<span class="ident">project_cargo_toml</span>, <span class="kw-2">&amp;</span><span class="ident">project</span>, <span class="kw-2">&amp;</span><span class="ident">wasm_workspace</span>);
+	<span class="kw">let</span> <span class="ident">final_wasm_binary</span> <span class="op">=</span> <span class="ident">wasm_binary_compressed</span>.<span class="ident">or</span>(<span class="ident">wasm_binary</span>);
 
-	(<span class="ident">wasm_binary_compressed</span>.<span class="ident">or</span>(<span class="ident">wasm_binary</span>), <span class="ident">bloaty</span>)
+	<span class="ident">generate_rerun_if_changed_instructions</span>(
+		<span class="ident">project_cargo_toml</span>,
+		<span class="kw-2">&amp;</span><span class="ident">project</span>,
+		<span class="kw-2">&amp;</span><span class="ident">wasm_workspace</span>,
+		<span class="ident">final_wasm_binary</span>.<span class="ident">as_ref</span>(),
+		<span class="kw-2">&amp;</span><span class="ident">bloaty</span>,
+	);
+
+	(<span class="ident">final_wasm_binary</span>, <span class="ident">bloaty</span>)
 }
 
 <span class="doccomment">/// Find the `Cargo.lock` relative to the `OUT_DIR` environment variable.</span>
@@ -1537,6 +1568,8 @@
 	<span class="ident">cargo_manifest</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>,
 	<span class="ident">project_folder</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>,
 	<span class="ident">wasm_workspace</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>,
+	<span class="ident">compressed_or_compact_wasm</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">WasmBinary</span><span class="op">&gt;</span>,
+	<span class="ident">bloaty_wasm</span>: <span class="kw-2">&amp;</span><span class="ident">WasmBinaryBloaty</span>,
 ) {
 	<span class="comment">// Rerun `build.rs` if the `Cargo.lock` changes</span>
 	<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cargo_lock</span>) <span class="op">=</span> <span class="ident">find_cargo_lock</span>(<span class="ident">cargo_manifest</span>) {
@@ -1585,6 +1618,9 @@
 
 	<span class="comment">// Make sure that if any file/folder of a dependency change, we need to rerun the `build.rs`</span>
 	<span class="ident">packages</span>.<span class="ident">iter</span>().<span class="ident">for_each</span>(<span class="ident">package_rerun_if_changed</span>);
+
+	<span class="ident">compressed_or_compact_wasm</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">w</span><span class="op">|</span> <span class="ident">rerun_if_changed</span>(<span class="ident">w</span>.<span class="ident">wasm_binary_path</span>()));
+	<span class="ident">rerun_if_changed</span>(<span class="ident">bloaty_wasm</span>.<span class="ident">wasm_binary_bloaty_path</span>());
 
 	<span class="comment">// Register our env variables</span>
 	<span class="macro">println!</span>(<span class="string">&quot;cargo:rerun-if-env-changed={}&quot;</span>, <span class="ident"><span class="kw">crate</span>::SKIP_BUILD_ENV</span>);
