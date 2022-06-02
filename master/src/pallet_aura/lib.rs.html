@@ -293,6 +293,15 @@
 <span id="288">288</span>
 <span id="289">289</span>
 <span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2017-2022 Parity Technologies (UK) Ltd.</span>
@@ -441,7 +450,11 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-	<span class="kw">fn</span> <span class="ident">change_authorities</span>(<span class="ident">new</span>: <span class="ident">WeakBoundedVec</span><span class="op">&lt;</span><span class="ident">T::AuthorityId</span>, <span class="ident">T::MaxAuthorities</span><span class="op">&gt;</span>) {
+	<span class="doccomment">/// Change authorities.</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// The storage will be applied immediately.</span>
+	<span class="doccomment">/// And aura consensus log will be appended to block&#39;s log.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">change_authorities</span>(<span class="ident">new</span>: <span class="ident">WeakBoundedVec</span><span class="op">&lt;</span><span class="ident">T::AuthorityId</span>, <span class="ident">T::MaxAuthorities</span><span class="op">&gt;</span>) {
 		<span class="op">&lt;</span><span class="ident">Authorities</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="kw-2">&amp;</span><span class="ident">new</span>);
 
 		<span class="kw">let</span> <span class="ident">log</span> <span class="op">=</span> <span class="ident">DigestItem::Consensus</span>(
@@ -451,7 +464,12 @@
 		<span class="op">&lt;</span><span class="ident">frame_system::Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::deposit_log</span>(<span class="ident">log</span>);
 	}
 
-	<span class="kw">fn</span> <span class="ident">initialize_authorities</span>(<span class="ident">authorities</span>: <span class="kw-2">&amp;</span>[<span class="ident">T::AuthorityId</span>]) {
+	<span class="doccomment">/// Initial authorities.</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// The storage will be applied immediately.</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// The authorities length must be equal or less than T::MaxAuthorities.</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">initialize_authorities</span>(<span class="ident">authorities</span>: <span class="kw-2">&amp;</span>[<span class="ident">T::AuthorityId</span>]) {
 		<span class="kw">if</span> <span class="op">!</span><span class="ident">authorities</span>.<span class="ident">is_empty</span>() {
 			<span class="macro">assert!</span>(<span class="op">&lt;</span><span class="ident">Authorities</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::get</span>().<span class="ident">is_empty</span>(), <span class="string">&quot;Authorities are already initialized!&quot;</span>);
 			<span class="kw">let</span> <span class="ident">bounded</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">BoundedSlice</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="kw">_</span>, <span class="ident">T::MaxAuthorities</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::try_from</span>(<span class="ident">authorities</span>)
