@@ -129,6 +129,10 @@
 <span id="124">124</span>
 <span id="125">125</span>
 <span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2022 Parity Technologies (UK) Ltd.</span>
@@ -166,7 +170,7 @@
 		<span class="ident">bench</span>::{<span class="ident">Benchmark</span>, <span class="ident">BenchmarkParams</span>, <span class="ident">BenchmarkType</span>},
 		<span class="ident">template::TemplateData</span>,
 	},
-	<span class="ident">shared::WeightParams</span>,
+	<span class="ident">shared</span>::{<span class="ident">HostInfoParams</span>, <span class="ident">WeightParams</span>},
 };
 
 <span class="doccomment">/// Benchmark the execution overhead per-block and per-extrinsic.</span>
@@ -195,6 +199,10 @@
 	<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">missing_docs</span>)]</span>
 	<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">flatten</span>)]</span>
 	<span class="kw">pub</span> <span class="ident">bench</span>: <span class="ident">BenchmarkParams</span>,
+
+	<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">missing_docs</span>)]</span>
+	<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">flatten</span>)]</span>
+	<span class="kw">pub</span> <span class="ident">hostinfo</span>: <span class="ident">HostInfoParams</span>,
 }
 
 <span class="doccomment">/// Used by the benchmark to build signed extrinsics.</span>

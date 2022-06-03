@@ -136,6 +136,12 @@
 <span id="131">131</span>
 <span id="132">132</span>
 <span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2022 Parity Technologies (UK) Ltd.</span>
@@ -179,6 +185,10 @@
 	<span class="ident">version</span>: <span class="ident">String</span>,
 	<span class="doccomment">/// Date that the template was filled out.</span>
 	<span class="ident">date</span>: <span class="ident">String</span>,
+	<span class="doccomment">/// Hostname of the machine that executed the benchmarks.</span>
+	<span class="ident">hostname</span>: <span class="ident">String</span>,
+	<span class="doccomment">/// CPU name of the machine that executed the benchmarks.</span>
+	<span class="ident">cpuname</span>: <span class="ident">String</span>,
 	<span class="doccomment">/// Command line arguments that were passed to the CLI.</span>
 	<span class="ident">args</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 	<span class="doccomment">/// Storage params of the executed command.</span>
@@ -203,6 +213,8 @@
 			<span class="ident">runtime_name</span>: <span class="ident">cfg</span>.<span class="ident">chain_spec</span>.<span class="ident">name</span>().<span class="ident">into</span>(),
 			<span class="ident">version</span>: <span class="ident">VERSION</span>.<span class="ident">into</span>(),
 			<span class="ident">date</span>: <span class="ident">chrono::Utc::now</span>().<span class="ident">format</span>(<span class="string">&quot;%Y-%m-%d (Y/M/D)&quot;</span>).<span class="ident">to_string</span>(),
+			<span class="ident">hostname</span>: <span class="ident">params</span>.<span class="ident">hostinfo</span>.<span class="ident">hostname</span>(),
+			<span class="ident">cpuname</span>: <span class="ident">params</span>.<span class="ident">hostinfo</span>.<span class="ident">cpuname</span>(),
 			<span class="ident">args</span>: <span class="ident">env::args</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
 			<span class="ident">params</span>: <span class="ident">params</span>.<span class="ident">clone</span>(),
 			..<span class="ident">Default::default</span>()

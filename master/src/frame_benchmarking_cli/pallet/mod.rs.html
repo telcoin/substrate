@@ -167,6 +167,11 @@
 <span id="162">162</span>
 <span id="163">163</span>
 <span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2020-2022 Parity Technologies (UK) Ltd.</span>
@@ -187,6 +192,7 @@
 <span class="kw">mod</span> <span class="ident">command</span>;
 <span class="kw">mod</span> <span class="ident">writer</span>;
 
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::shared::HostInfoParams</span>;
 <span class="kw">use</span> <span class="ident">sc_cli</span>::{
 	<span class="ident">ExecutionStrategy</span>, <span class="ident">WasmExecutionMethod</span>, <span class="ident">WasmtimeInstantiationStrategy</span>,
 	<span class="ident">DEFAULT_WASMTIME_INSTANTIATION_STRATEGY</span>, <span class="ident">DEFAULT_WASM_EXECUTION_METHOD</span>,
@@ -259,6 +265,10 @@
 	<span class="doccomment">/// Path to Handlebars template file used for outputting benchmark results. (Optional)</span>
 	<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>)]</span>
 	<span class="kw">pub</span> <span class="ident">template</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span>,
+
+	<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">missing_docs</span>)]</span>
+	<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">flatten</span>)]</span>
+	<span class="kw">pub</span> <span class="ident">hostinfo_params</span>: <span class="ident">HostInfoParams</span>,
 
 	<span class="doccomment">/// Which analysis function to use when outputting benchmarks:</span>
 	<span class="doccomment">/// * min-squares (default)</span>

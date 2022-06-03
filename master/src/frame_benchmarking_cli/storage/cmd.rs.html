@@ -202,6 +202,10 @@
 <span id="197">197</span>
 <span id="198">198</span>
 <span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2022 Parity Technologies (UK) Ltd.</span>
@@ -238,7 +242,7 @@
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt::Debug</span>, <span class="ident">path::PathBuf</span>, <span class="ident">sync::Arc</span>};
 
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::template::TemplateData</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::shared</span>::{<span class="ident">new_rng</span>, <span class="ident">WeightParams</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::shared</span>::{<span class="ident">new_rng</span>, <span class="ident">HostInfoParams</span>, <span class="ident">WeightParams</span>};
 
 <span class="doccomment">/// Benchmark the storage speed of a chain snapshot.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Parser</span>)]</span>
@@ -266,6 +270,10 @@
 	<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">missing_docs</span>)]</span>
 	<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">flatten</span>)]</span>
 	<span class="kw">pub</span> <span class="ident">weight_params</span>: <span class="ident">WeightParams</span>,
+
+	<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">missing_docs</span>)]</span>
+	<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">flatten</span>)]</span>
+	<span class="kw">pub</span> <span class="ident">hostinfo</span>: <span class="ident">HostInfoParams</span>,
 
 	<span class="doccomment">/// Skip the `read` benchmark.</span>
 	<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>)]</span>
