@@ -3463,6 +3463,8 @@
 <span id="3458">3458</span>
 <span id="3459">3459</span>
 <span id="3460">3460</span>
+<span id="3461">3461</span>
+<span id="3462">3462</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2017-2022 Parity Technologies (UK) Ltd.</span>
@@ -3767,6 +3769,8 @@
 	<span class="doccomment">/// Where to find the database.</span>
 	<span class="kw">pub</span> <span class="ident">source</span>: <span class="ident">DatabaseSource</span>,
 	<span class="doccomment">/// Block pruning mode.</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// NOTE: only finalized blocks are subject for removal!</span>
 	<span class="kw">pub</span> <span class="ident">keep_blocks</span>: <span class="ident">KeepBlocks</span>,
 }
 

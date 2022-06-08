@@ -323,6 +323,8 @@
 <span id="318">318</span>
 <span id="319">319</span>
 <span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2017-2022 Parity Technologies (UK) Ltd.</span>
@@ -402,6 +404,8 @@
 	<span class="doccomment">/// State pruning settings.</span>
 	<span class="kw">pub</span> <span class="ident">state_pruning</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PruningMode</span><span class="op">&gt;</span>,
 	<span class="doccomment">/// Number of blocks to keep in the db.</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// NOTE: only finalized blocks are subject for removal!</span>
 	<span class="kw">pub</span> <span class="ident">keep_blocks</span>: <span class="ident">KeepBlocks</span>,
 	<span class="doccomment">/// Chain configuration.</span>
 	<span class="kw">pub</span> <span class="ident">chain_spec</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">ChainSpec</span><span class="op">&gt;</span>,

@@ -65,6 +65,8 @@
 <span id="60">60</span>
 <span id="61">61</span>
 <span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Substrate.</span>
 
 <span class="comment">// Copyright (C) 2020-2022 Parity Technologies (UK) Ltd.</span>
@@ -100,6 +102,8 @@
 	<span class="doccomment">/// Specify the number of finalized blocks to keep in the database.</span>
 	<span class="doccomment">///</span>
 	<span class="doccomment">/// Default is to keep all blocks.</span>
+	<span class="doccomment">///</span>
+	<span class="doccomment">/// NOTE: only finalized blocks are subject for removal!</span>
 	<span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;COUNT&quot;</span>)]</span>
 	<span class="kw">pub</span> <span class="ident">keep_blocks</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
 }
