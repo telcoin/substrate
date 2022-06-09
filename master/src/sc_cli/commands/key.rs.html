@@ -88,8 +88,8 @@
 <span class="doccomment">/// Key utilities for the cli.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">clap::Subcommand</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">KeySubcommand</span> {
-	<span class="doccomment">/// Generate a random node libp2p key, save it to file or print it to stdout</span>
-	<span class="doccomment">/// and print its peer ID to stderr.</span>
+	<span class="doccomment">/// Generate a random node key, write it to a file or stdout and write the</span>
+	<span class="doccomment">/// corresponding peer-id to stderr</span>
 	<span class="ident">GenerateNodeKey</span>(<span class="ident">GenerateNodeKeyCmd</span>),
 
 	<span class="doccomment">/// Generate a random account</span>
@@ -98,7 +98,7 @@
 	<span class="doccomment">/// Gets a public key and a SS58 address from the provided Secret URI</span>
 	<span class="ident">Inspect</span>(<span class="ident">InspectKeyCmd</span>),
 
-	<span class="doccomment">/// Print the peer ID corresponding to the node key in the given file</span>
+	<span class="doccomment">/// Load a node key from a file or stdin and print the corresponding peer-id</span>
 	<span class="ident">InspectNodeKey</span>(<span class="ident">InspectNodeKeyCmd</span>),
 
 	<span class="doccomment">/// Insert a key to the keystore of a node.</span>
