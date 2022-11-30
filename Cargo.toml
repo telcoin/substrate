@@ -156,6 +156,8 @@ members = [
 	"frame/utility",
 	"frame/vesting",
 	"frame/whitelist",
+	# lattice-specific
+	"primitives/account",
 	"primitives/api",
 	"primitives/api/proc-macro",
 	"primitives/api/test",
