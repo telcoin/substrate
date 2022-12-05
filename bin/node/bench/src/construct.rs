@@ -238,7 +238,7 @@ impl sc_transaction_pool_api::TransactionPool for Transactions {
 
 	/// Returns a future that imports a bunch of unverified transactions to the pool.
 	fn submit_at(
-		&self,
+		&mut self,
 		_at: &BlockId<Self::Block>,
 		_source: TransactionSource,
 		_xts: Vec<TransactionFor<Self>>,

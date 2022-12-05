@@ -262,7 +262,7 @@ where
 	type Error = PoolApi::Error;
 
 	fn submit_at(
-		&self,
+		&mut self,
 		at: &BlockId<Self::Block>,
 		source: TransactionSource,
 		xts: Vec<TransactionFor<Self>>,

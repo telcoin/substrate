@@ -197,7 +197,7 @@ pub trait TransactionPool: Send + Sync {
 
 	/// Returns a future that imports a bunch of unverified transactions to the pool.
 	fn submit_at(
-		&self,
+		&mut self,
 		at: &BlockId<Self::Block>,
 		source: TransactionSource,
 		xts: Vec<TransactionFor<Self>>,
