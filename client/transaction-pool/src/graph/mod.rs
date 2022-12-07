@@ -44,4 +44,4 @@ pub use self::{
 		TransactionFor,
 	},
 };
-pub use validated_pool::{IsValidator, ValidatedTransaction};
+pub use validated_pool::{IsValidator, ValidatedTransaction, ValidatedPool};
