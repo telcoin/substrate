@@ -79,21 +79,23 @@ type PolledIterator<PoolApi> = Pin<Box<dyn Future<Output = ReadyIteratorFor<Pool
 pub type FullPool<Block, Client> = BasicPool<FullChainApi<Client, Block>, Block>;
 
 /// Basic implementation of transaction pool that can be customized by providing PoolApi.
+#[allow(missing_docs)]
 pub struct BasicPool<PoolApi, Block>
 where
 	Block: BlockT,
 	PoolApi: graph::ChainApi<Block = Block>,
 {
-	pool: Arc<graph::Pool<PoolApi>>,
-	api: Arc<PoolApi>,
-	revalidation_strategy: Arc<Mutex<RevalidationStrategy<NumberFor<Block>>>>,
-	revalidation_queue: Arc<revalidation::RevalidationQueue<PoolApi>>,
-	ready_poll: Arc<Mutex<ReadyPoll<ReadyIteratorFor<PoolApi>, Block>>>,
-	metrics: PrometheusMetrics,
-	enactment_state: Arc<Mutex<EnactmentState<Block>>>,
+	pub pool: Arc<graph::Pool<PoolApi>>,
+	pub api: Arc<PoolApi>,
+	pub revalidation_strategy: Arc<Mutex<RevalidationStrategy<NumberFor<Block>>>>,
+	pub revalidation_queue: Arc<revalidation::RevalidationQueue<PoolApi>>,
+	pub ready_poll: Arc<Mutex<ReadyPoll<ReadyIteratorFor<PoolApi>, Block>>>,
+	pub metrics: PrometheusMetrics,
+	pub enactment_state: Arc<Mutex<EnactmentState<Block>>>,
 }
 
-struct ReadyPoll<T, Block: BlockT> {
+#[allow(missing_docs)]
+pub struct ReadyPoll<T, Block: BlockT> {
 	updated_at: NumberFor<Block>,
 	pollers: Vec<(NumberFor<Block>, oneshot::Sender<T>)>,
 }
@@ -467,7 +469,8 @@ where
 }
 
 #[cfg_attr(test, derive(Debug))]
-enum RevalidationStatus<N> {
+#[allow(missing_docs)]
+pub enum RevalidationStatus<N> {
 	/// The revalidation has never been completed.
 	NotScheduled,
 	/// The revalidation is scheduled.
@@ -476,16 +479,19 @@ enum RevalidationStatus<N> {
 	InProgress,
 }
 
-enum RevalidationStrategy<N> {
+#[allow(missing_docs)]
+pub enum RevalidationStrategy<N> {
 	Always,
 	Light(RevalidationStatus<N>),
 }
 
-struct RevalidationAction {
+#[allow(missing_docs)]
+pub struct RevalidationAction {
 	revalidate: bool,
 	resubmit: bool,
 }
 
+#[allow(missing_docs)]
 impl<N: Clone + Copy + AtLeast32Bit> RevalidationStrategy<N> {
 	pub fn clear(&mut self) {
 		if let Self::Light(status) = self {
