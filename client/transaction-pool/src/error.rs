@@ -38,6 +38,16 @@ pub enum Error {
 
 	#[error("Runtime error: {0}")]
 	RuntimeApi(String),
+
+    #[error("Bincode error.")]
+    Bincode(#[from] Box<bincode::ErrorKind>),
+
+	#[error("Loopback send transaction error in submit_one().")]
+	LoopbackSend,
+
+    #[error("Flume receive error")]
+    FlumeReceiveError(#[from] RecvError),
+
 }
 
 impl sc_transaction_pool_api::error::IntoPoolError for Error {
