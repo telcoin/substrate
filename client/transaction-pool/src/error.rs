@@ -46,7 +46,7 @@ pub enum Error {
 	LoopbackSend,
 
     #[error("Flume receive error")]
-    FlumeReceiveError(#[from] RecvError),
+    FlumeReceiveError(#[from] flume::RecvError),
 
 }
 
