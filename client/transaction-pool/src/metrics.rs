@@ -87,6 +87,7 @@ impl Metrics {
 }
 
 /// Transaction pool api Prometheus metrics.
+#[allow(missing_docs)]
 pub struct ApiMetrics {
 	pub validations_scheduled: Counter<U64>,
 	pub validations_finished: Counter<U64>,

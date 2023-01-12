@@ -32,6 +32,7 @@ mod revalidation;
 mod tests;
 
 pub use crate::api::FullChainApi;
+pub use crate::metrics::{ApiMetrics, ApiMetricsExt};
 use async_trait::async_trait;
 use enactment_state::EnactmentState;
 use futures::{
