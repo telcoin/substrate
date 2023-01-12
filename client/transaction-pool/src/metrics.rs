@@ -20,7 +20,7 @@
 
 use std::sync::Arc;
 
-use prometheus_endpoint::{register, Counter, PrometheusError, Registry, U64};
+pub use prometheus_endpoint::{register, Counter, PrometheusError, Registry, U64};
 
 #[derive(Clone, Default)]
 pub struct MetricsLink(Arc<Option<Metrics>>);
