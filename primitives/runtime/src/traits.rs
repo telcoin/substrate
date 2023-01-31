@@ -19,7 +19,7 @@
 
 use crate::{
 	codec::{Codec, Decode, Encode, MaxEncodedLen},
-	generic::Digest,
+	generic::{Digest, Category},
 	scale_info::{MetaType, StaticTypeInfo, TypeInfo},
 	transaction_validity::{
 		TransactionSource, TransactionValidity, TransactionValidityError, UnknownTransaction,
@@ -849,6 +849,15 @@ pub trait Header:
 	/// Hashing algorithm
 	type Hashing: Hash<Output = Self::Hash>;
 
+	// /// The type of Category for the block from Lattice consensus.
+	// type Category: Send
+	// 	+ Sync
+	// 	+ Codec
+	// 	+ Debug
+	// 	+ Clone
+	// 	+ Serialize
+	// 	+ Eq;
+
 	/// Creates new header.
 	fn new(
 		number: Self::Number,
@@ -856,6 +865,7 @@ pub trait Header:
 		state_root: Self::Hash,
 		parent_hash: Self::Hash,
 		digest: Digest,
+		category: Category,
 	) -> Self;
 
 	/// Returns a reference to the header number.

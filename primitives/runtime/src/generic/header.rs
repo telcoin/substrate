@@ -31,6 +31,12 @@ use serde::{Deserialize, Serialize};
 use sp_core::U256;
 use sp_std::fmt::Debug;
 
+#[derive(Encode, Decode, PartialEq, Eq, Clone, sp_core::RuntimeDebug, TypeInfo, Default)]
+#[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
+pub struct Category {
+	base_fee: U256,
+}
+
 /// Abstraction over a block header for a substrate chain.
 #[derive(Encode, Decode, PartialEq, Eq, Clone, sp_core::RuntimeDebug, TypeInfo)]
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
@@ -52,6 +58,8 @@ pub struct Header<Number: Copy + Into<U256> + TryFrom<U256>, Hash: HashT> {
 	pub extrinsics_root: Hash::Output,
 	/// A chain-specific digest of data useful for light clients or referencing auxiliary data.
 	pub digest: Digest,
+	/// The category of block from Lattice consensus
+    pub category: Category,
 }
 
 #[cfg(feature = "std")]
@@ -66,7 +74,9 @@ where
 			self.number.size_of(ops) +
 			self.state_root.size_of(ops) +
 			self.extrinsics_root.size_of(ops) +
-			self.digest.size_of(ops)
+			self.digest.size_of(ops) //+
+			// TODO: what happens if this isn't included?
+			// self.category.size_of(ops)
 	}
 }
 
@@ -166,8 +176,9 @@ where
 		state_root: Self::Hash,
 		parent_hash: Self::Hash,
 		digest: Digest,
+		category: Category,
 	) -> Self {
-		Self { number, extrinsics_root, state_root, parent_hash, digest }
+		Self { number, extrinsics_root, state_root, parent_hash, digest, category }
 	}
 }
 
@@ -184,11 +195,23 @@ where
 	Hash: HashT,
 	Hash::Output:
 		Default + sp_std::hash::Hash + Copy + Member + MaybeDisplay + SimpleBitOps + Codec,
+	// Category: Send
+	// 	+ Sync
+	// 	+ Codec
+	// 	+ Debug
+	// 	+ Clone
+	// 	+ Serialize
+	// 	+ Eq
+	// 	+ 'static,
 {
 	/// Convenience helper for computing the hash of the header without having
 	/// to import the trait.
 	pub fn hash(&self) -> Hash::Output {
 		Hash::hash_of(self)
+	}
+
+	pub fn category(&self) -> Category {
+		self.category.clone()
 	}
 }
 
@@ -237,9 +260,11 @@ mod tests {
 			digest: crate::generic::Digest {
 				logs: vec![crate::generic::DigestItem::Other(b"6".to_vec())],
 			},
+			category: Category::default(),
 		};
 
 		let header_encoded = header.encode();
+		println!("\n\nheader encoded: {header_encoded:?}\n");
 		assert_eq!(
 			header_encoded,
 			vec![
@@ -261,9 +286,11 @@ mod tests {
 			digest: crate::generic::Digest {
 				logs: vec![crate::generic::DigestItem::Other(b"5000".to_vec())],
 			},
+			category: Category::default(),
 		};
 
 		let header_encoded = header.encode();
+		println!("header_encoded: {header_encoded:?}");
 		assert_eq!(
 			header_encoded,
 			vec![

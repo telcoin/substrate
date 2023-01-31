@@ -33,6 +33,6 @@ pub use self::{
 	checked_extrinsic::CheckedExtrinsic,
 	digest::{Digest, DigestItem, DigestItemRef, OpaqueDigestItemId},
 	era::{Era, Phase},
-	header::Header,
+	header::{Header, Category},
 	unchecked_extrinsic::{SignedPayload, UncheckedExtrinsic},
 };
