@@ -1299,7 +1299,7 @@ impl<T: Config> Pallet<T> {
 	}
 
 	/// Start the execution of a particular block.
-	pub fn initialize(number: &T::BlockNumber, parent_hash: &T::Hash, digest: &generic::Digest) {
+	pub fn initialize(number: &T::BlockNumber, parent_hash: &T::Hash, digest: &generic::Digest, category: &generic::Category) {
 		// populate environment
 		ExecutionPhase::<T>::put(Phase::Initialization);
 		storage::unhashed::put(well_known_keys::EXTRINSIC_INDEX, &0u32);
@@ -1307,6 +1307,7 @@ impl<T: Config> Pallet<T> {
 		<Digest<T>>::put(digest);
 		<ParentHash<T>>::put(parent_hash);
 		<BlockHash<T>>::insert(*number - One::one(), parent_hash);
+		<Category<T>>::put(category);
 
 		// Remove previous block data from storage
 		BlockWeight::<T>::kill();
@@ -1365,7 +1366,7 @@ impl<T: Config> Pallet<T> {
 		// stay to be inspected by the client and will be cleared by `Self::initialize`.
 		let number = <Number<T>>::get();
 		let parent_hash = <ParentHash<T>>::get();
-		let digest = <Digest<T>>::get();
+		// let digest = <Digest<T>>::get();
 
 		let extrinsics = (0..ExtrinsicCount::<T>::take().unwrap_or_default())
 			.map(ExtrinsicData::<T>::take)
@@ -1390,7 +1391,7 @@ impl<T: Config> Pallet<T> {
 			extrinsics_root,
 			storage_root,
 			parent_hash,
-			digest,
+			// digest,
 		)
 	}
 
