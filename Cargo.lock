@@ -3548,19 +3548,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "lattice"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "log",
- "parity-scale-codec",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
- "thiserror",
-]
-
-[[package]]
 name = "lattice-account"
 version = "0.1.0"
 dependencies = [
@@ -8101,7 +8088,6 @@ dependencies = [
  "async-trait",
  "futures",
  "jsonrpsee",
- "lattice",
  "log",
  "parity-scale-codec",
  "sc-basic-authorship",
@@ -8122,6 +8108,7 @@ dependencies = [
  "sp-core",
  "sp-inherents",
  "sp-keystore",
+ "sp-lattice",
  "sp-runtime",
  "sp-timestamp",
  "substrate-prometheus-endpoint",
@@ -9937,6 +9924,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "sp-lattice"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "log",
+ "parity-scale-codec",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-std",
+ "thiserror",
+]
+
+[[package]]
 name = "sp-maybe-compressed-blob"
 version = "4.1.0-dev"
 dependencies = [
@@ -10238,7 +10238,6 @@ dependencies = [
  "futures-timer",
  "log",
  "parity-scale-codec",
- "sp-api",
  "sp-inherents",
  "sp-runtime",
  "sp-std",

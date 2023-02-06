@@ -7,7 +7,7 @@ use sp_runtime::{traits::Block as BlockT, DigestItem, Digest};
 use crate::ConsensusDataProvider;
 use sc_client_api::{AuxStore, UsageProvider, HeaderBackend};
 use codec::{Encode, Decode};
-use lattice::BlockCategoryInherentData;
+use sp_lattice::BlockCategoryInherentData;
 
 #[derive(Encode, Decode)]
 pub enum Category {
