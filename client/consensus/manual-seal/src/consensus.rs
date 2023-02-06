@@ -26,6 +26,7 @@ use sp_runtime::{traits::Block as BlockT, Digest};
 pub mod aura;
 pub mod babe;
 pub mod timestamp;
+pub mod lattice;
 
 /// Consensus data provider, manual seal uses this trait object for authoring blocks valid
 /// for any runtime.

@@ -186,6 +186,7 @@ members = [
 	"primitives/io",
 	"primitives/keyring",
 	"primitives/keystore",
+	"primitives/lattice",
 	"primitives/maybe-compressed-blob",
 	"primitives/merkle-mountain-range",
 	"primitives/npos-elections",

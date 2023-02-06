@@ -4,9 +4,10 @@ use core::marker::PhantomData;
 use sp_api::{ProvideRuntimeApi, TransactionFor};
 use sp_blockchain::HeaderMetadata;
 use sp_runtime::{traits::Block as BlockT, DigestItem, Digest};
-use sc_consensus_manual_seal::ConsensusDataProvider;
+use crate::ConsensusDataProvider;
 use sc_client_api::{AuxStore, UsageProvider, HeaderBackend};
 use codec::{Encode, Decode};
+use lattice::BlockCategoryInherentData;
 
 #[derive(Encode, Decode)]
 pub enum Category {
@@ -44,9 +45,9 @@ where
 
     type Proof = P;
 
-    fn create_digest(&self, _parent: &<B as BlockT>::Header, inherents: &sp_inherents::InherentData) -> Result<sp_runtime::Digest, sc_consensus_manual_seal::Error> {
+    fn create_digest(&self, _parent: &<B as BlockT>::Header, inherents: &sp_inherents::InherentData) -> Result<sp_runtime::Digest, crate::Error> {
         // let category = "Category1";
-        let category = inherents.category_inherent_data();
+        let category = inherents.category_inherent_data()?;
         let digest = DigestItem::PreRuntime(*b"tel0", category.encode());
         Ok(Digest { logs: vec![digest] })
     }
@@ -57,7 +58,7 @@ where
 		_params: &mut sc_consensus::BlockImportParams<B, Self::Transaction>,
 		_inherents: &sp_inherents::InherentData,
 		_proof: Self::Proof,
-	) -> Result<(), sc_consensus_manual_seal::Error> {
+	) -> Result<(), crate::Error> {
         Ok(())
     }
 }

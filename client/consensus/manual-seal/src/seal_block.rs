@@ -118,11 +118,17 @@ pub async fn seal_block<B, BI, SC, C, E, TP, CIDP, P>(
 		let proposer = env.init(&parent).map_err(|err| Error::StringError(err.to_string())).await?;
 		let inherents_len = inherent_data.len();
 
+		// pass in category to this function as Digest::PreRuntime
 		let digest = if let Some(digest_provider) = digest_provider {
 			digest_provider.create_digest(&parent, &inherent_data)?
 		} else {
 			Default::default()
 		};
+
+		// push it here?
+		//
+		// or add as consensus provider to manual seal!
+		// digest.push(sp_runtime::DigestItem::PreRuntime(CONSENSUS_ENGINE_ID, BlockCategory.as_bytes()));
 
 		let proposal = proposer
 			.propose(

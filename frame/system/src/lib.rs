@@ -568,6 +568,7 @@ pub mod pallet {
 	#[pallet::whitelist_storage]
 	#[pallet::getter(fn block_weight)]
 	pub(super) type BlockWeight<T: Config> = StorageValue<_, ConsumedWeight, ValueQuery>;
+	// pub(super) type BlockWeight<T: Config> = StorageMap<_, Twox64Concat, T::BlockNumber, ConsumedWeight, ValueQuery>;
 
 	/// Total length (in bytes) for all extrinsics put together, for the current block.
 	#[pallet::storage]
@@ -1307,9 +1308,14 @@ impl<T: Config> Pallet<T> {
 		<Digest<T>>::put(digest);
 		<ParentHash<T>>::put(parent_hash);
 		<BlockHash<T>>::insert(*number - One::one(), parent_hash);
+		// let category = digest.log(|l| {
 
+		// });
+
+		// digest is a Vec<DigestItems> that have been filterd down to PreRuntime variants
 		// Remove previous block data from storage
 		BlockWeight::<T>::kill();
+		// BlockWeight::<T>::remove();
 	}
 
 	/// Remove temporary "environment" entries in storage, compute the storage root and return the
