@@ -1,6 +1,7 @@
 // This is the consensus provider passed to Manual Seal for PreRuntime digests
 
 use core::marker::PhantomData;
+use std::sync::Arc;
 use sp_api::{ProvideRuntimeApi, TransactionFor};
 use sp_blockchain::HeaderMetadata;
 use sp_runtime::{traits::Block as BlockT, DigestItem, Digest};
@@ -15,35 +16,24 @@ pub enum Category {
     Cat2,
 }
 
-pub struct LatticeConsensusDataProvider<B, C, P> {
-	// phantom data for required generics
-    _phantom: PhantomData<(B, C, P)>,
+pub struct LatticeConsensusDataProvider<C> {
+    _client: Arc<C>,
 }
 
-impl<B, C, P> LatticeConsensusDataProvider<B, C, P>
-where
-    B: BlockT,
-    C: AuxStore + ProvideRuntimeApi<B> + UsageProvider<B>,
-{
-    pub fn new() -> Self {
-        Self { _phantom: PhantomData }
+impl<C> LatticeConsensusDataProvider<C> {
+    pub fn new(_client: Arc<C>) -> Self {
+        Self { _client }
     }
 }
 
-impl <B, C, P> ConsensusDataProvider<B> for LatticeConsensusDataProvider<B, C, P>
+impl <B, C> ConsensusDataProvider<B> for LatticeConsensusDataProvider<C>
 where
     B: BlockT,
-    C: AuxStore
-		+ HeaderBackend<B>
-		+ HeaderMetadata<B, Error = sp_blockchain::Error>
-		+ UsageProvider<B>
-		+ ProvideRuntimeApi<B>,
-	P: Send + Sync,
+    C: ProvideRuntimeApi<B> + Send + Sync,
 {
+    type Transaction = ();
 
-    type Transaction = TransactionFor<C, B>;
-
-    type Proof = P;
+    type Proof = ();
 
     fn create_digest(&self, _parent: &<B as BlockT>::Header, inherents: &sp_inherents::InherentData) -> Result<sp_runtime::Digest, crate::Error> {
         // let category = "Category1";
