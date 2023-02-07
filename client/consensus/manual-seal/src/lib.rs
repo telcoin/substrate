@@ -165,7 +165,7 @@ pub async fn run_manual_seal<B, BI, CB, E, C, TP, SC, CS, CIDP, P>(
 {
 	while let Some(command) = commands_stream.next().await {
 		match command {
-			EngineCommand::SealNewBlock { create_empty, finalize, parent_hash, sender } => {
+			EngineCommand::SealNewBlock { create_empty, finalize, parent_hash, sender, category } => {
 				seal_block(SealBlockParams {
 					sender,
 					parent_hash,
@@ -178,6 +178,7 @@ pub async fn run_manual_seal<B, BI, CB, E, C, TP, SC, CS, CIDP, P>(
 					pool: pool.clone(),
 					client: client.clone(),
 					create_inherent_data_providers: &create_inherent_data_providers,
+					category,
 				})
 				.await;
 			},
@@ -232,6 +233,7 @@ pub async fn run_instant_seal<B, BI, CB, E, C, TP, SC, CIDP, P>(
 		finalize: false,
 		parent_hash: None,
 		sender: None,
+		category: None,
 	});
 
 	run_manual_seal(ManualSealParams {
@@ -286,6 +288,7 @@ pub async fn run_instant_seal_and_finalize<B, BI, CB, E, C, TP, SC, CIDP, P>(
 		finalize: true,
 		parent_hash: None,
 		sender: None,
+		category: None,
 	});
 
 	run_manual_seal(ManualSealParams {
@@ -385,6 +388,7 @@ mod tests {
 					finalize: true,
 					parent_hash: None,
 					sender,
+					category: None,
 				}
 			});
 		let future = run_manual_seal(ManualSealParams {
@@ -472,6 +476,7 @@ mod tests {
 			sender: Some(tx),
 			create_empty: false,
 			finalize: false,
+			category: None,
 		})
 		.await
 		.unwrap();
@@ -558,6 +563,7 @@ mod tests {
 			sender: Some(tx),
 			create_empty: false,
 			finalize: false,
+			category: None,
 		})
 		.await
 		.unwrap();
@@ -594,6 +600,7 @@ mod tests {
 				sender: Some(tx1),
 				create_empty: false,
 				finalize: false,
+				category: None,
 			})
 			.await
 			.is_ok());
@@ -607,6 +614,7 @@ mod tests {
 				sender: Some(tx2),
 				create_empty: false,
 				finalize: false,
+				category: None,
 			})
 			.await
 			.is_ok());
@@ -657,6 +665,7 @@ mod tests {
 			sender: Some(tx),
 			create_empty: true,
 			finalize: false,
+			category: None,
 		})
 		.await
 		.unwrap();
@@ -666,4 +675,6 @@ mod tests {
 		let header = client.header(&BlockId::Number(1)).unwrap().unwrap();
 		assert_eq!(header.hash(), created_block.hash);
 	}
+
+	// TODO: write a unit test for checking category
 }

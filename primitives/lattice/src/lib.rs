@@ -69,12 +69,18 @@ impl InherentError {
 pub trait BlockCategoryInherentData {
     /// Get block category inherent data.
     fn category_inherent_data(&self) -> Result<Option<InherentType>, sp_inherents::Error>;
+	/// Replace block category inherent type.
+	fn category_replace_inherent_data(&mut self, new: InherentType);
 }
 
 impl BlockCategoryInherentData for InherentData {
     fn category_inherent_data(&self) -> Result<Option<InherentType>, sp_inherents::Error> {
         self.get_data(&INHERENT_IDENTIFIER)
     }
+
+	fn category_replace_inherent_data(&mut self, new: InherentType) {
+		self.replace_data(INHERENT_IDENTIFIER, &new);
+	}
 }
 
 #[cfg(feature = "std")]
@@ -123,7 +129,8 @@ impl sp_inherents::InherentDataProvider for InherentDataProvider {
 		if *identifier != INHERENT_IDENTIFIER {
 			return None
 		}
-        todo!()
+		// TODO: handle these errors
+        todo!("try handle error inside lattice inherent data provider")
 
 		// match InherentError::try_from(&INHERENT_IDENTIFIER, error)? {
 		// 	InherentError::ValidAtTimestamp(valid) => {

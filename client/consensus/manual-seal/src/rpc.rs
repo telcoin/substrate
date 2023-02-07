@@ -29,6 +29,7 @@ use jsonrpsee::{
 };
 use sc_consensus::ImportedAux;
 use serde::{Deserialize, Serialize};
+use sp_lattice::Category;
 use sp_runtime::EncodedJustification;
 
 /// Sender passed to the authorship task to report errors or successes.
@@ -52,6 +53,8 @@ pub enum EngineCommand<Hash> {
 		parent_hash: Option<Hash>,
 		/// sender to report errors/success to the rpc.
 		sender: Sender<CreatedBlock<Hash>>,
+		/// Category of block used for base fee - only used for lattice consensus.
+		category: Option<Category>,
 	},
 	/// Tells the engine to finalize the block with the supplied hash
 	FinalizeBlock {
@@ -122,6 +125,7 @@ impl<Hash: Send + 'static> ManualSealApiServer<Hash> for ManualSeal<Hash> {
 			finalize,
 			parent_hash,
 			sender: Some(sender),
+			category: None,
 		};
 
 		sink.send(command).await?;

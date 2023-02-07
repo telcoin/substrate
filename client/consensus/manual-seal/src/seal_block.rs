@@ -31,6 +31,7 @@ use sp_runtime::{
 	traits::{Block as BlockT, Header as HeaderT},
 };
 use std::{collections::HashMap, sync::Arc, time::Duration};
+use sp_lattice::{BlockCategoryInherentData, Category};
 
 /// max duration for creating a proposal in secs
 pub const MAX_PROPOSAL_DURATION: u64 = 10;
@@ -61,6 +62,8 @@ pub struct SealBlockParams<'a, B: BlockT, BI, SC, C: ProvideRuntimeApi<B>, E, TP
 	pub block_import: &'a mut BI,
 	/// Something that can create the inherent data providers.
 	pub create_inherent_data_providers: &'a CIDP,
+	/// Category for the block's base fee - only used in lattice consensus.
+	pub category: Option<Category>,
 }
 
 /// seals a new block with the given params
@@ -77,6 +80,7 @@ pub async fn seal_block<B, BI, SC, C, E, TP, CIDP, P>(
 		create_inherent_data_providers,
 		consensus_data_provider: digest_provider,
 		mut sender,
+		category,
 	}: SealBlockParams<'_, B, BI, SC, C, E, TP, CIDP, P>,
 ) where
 	B: BlockT,
@@ -113,22 +117,22 @@ pub async fn seal_block<B, BI, SC, C, E, TP, CIDP, P>(
 			.await
 			.map_err(|e| Error::Other(e))?;
 
-		let inherent_data = inherent_data_providers.create_inherent_data()?;
+		let mut inherent_data = inherent_data_providers.create_inherent_data()?;
+
+		// update the category in inherents
+		if let Some(cat) = category {
+			inherent_data.category_replace_inherent_data(cat);
+		}
 
 		let proposer = env.init(&parent).map_err(|err| Error::StringError(err.to_string())).await?;
 		let inherents_len = inherent_data.len();
 
-		// pass in category to this function as Digest::PreRuntime
+		// create the pre-runtime digest for block category
 		let digest = if let Some(digest_provider) = digest_provider {
 			digest_provider.create_digest(&parent, &inherent_data)?
 		} else {
 			Default::default()
 		};
-
-		// push it here?
-		//
-		// or add as consensus provider to manual seal!
-		// digest.push(sp_runtime::DigestItem::PreRuntime(CONSENSUS_ENGINE_ID, BlockCategory.as_bytes()));
 
 		let proposal = proposer
 			.propose(
