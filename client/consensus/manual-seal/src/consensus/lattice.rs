@@ -30,8 +30,9 @@ impl <B, C> ConsensusDataProvider<B> for LatticeConsensusDataProvider<C>
 where
     B: BlockT,
     C: ProvideRuntimeApi<B> + Send + Sync,
+    // P: Send + Sync,
 {
-    type Transaction = ();
+	type Transaction = TransactionFor<C, B>;
 
     type Proof = ();
 
