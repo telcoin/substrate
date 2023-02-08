@@ -5,8 +5,11 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use codec::{Decode, Encode};
+use codec::{Decode, Encode, MaxEncodedLen};
 use sp_inherents::{InherentData, InherentIdentifier, IsFatalError};
+use sp_runtime::ConsensusEngineId;
+
+pub const LATTICE_ENGINE_ID: ConsensusEngineId = *b"tel0";
 
 /// The identifier for the block `category` inherent.
 pub const INHERENT_IDENTIFIER: InherentIdentifier = *b"telblock";
@@ -17,15 +20,17 @@ pub type InherentType = Category;
 /// Unit type wrapper that represents a Category.
 ///
 /// Categories are assigned to blocks and determine base fees.
-#[derive(Debug, Encode, Decode, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Encode, Decode, Clone, Copy, PartialEq, Eq, scale_info::TypeInfo, MaxEncodedLen)]
 pub enum Category {
     Cat1,
     Cat2,
+	Cat3,
 }
 
+// TODO: What should default category be?
 impl Default for Category {
     fn default() -> Self {
-        Self::Cat1
+        Self::Cat3
     }
 }
 
