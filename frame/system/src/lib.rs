@@ -1308,14 +1308,9 @@ impl<T: Config> Pallet<T> {
 		<Digest<T>>::put(digest);
 		<ParentHash<T>>::put(parent_hash);
 		<BlockHash<T>>::insert(*number - One::one(), parent_hash);
-		// let category = digest.log(|l| {
 
-		// });
-
-		// digest is a Vec<DigestItems> that have been filterd down to PreRuntime variants
 		// Remove previous block data from storage
 		BlockWeight::<T>::kill();
-		// BlockWeight::<T>::remove();
 	}
 
 	/// Remove temporary "environment" entries in storage, compute the storage root and return the
